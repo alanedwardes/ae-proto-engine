@@ -1,29 +1,26 @@
 #pragma once
 
-#include "shared\EntityFactory.h"
+#include "shared\GameObjectFactory.h"
 EntityFactoryHolder g_oEntityFactoryHolder;
-
-#include "shared\GeometryFactory.h"
-GeometryFactoryHolder g_oGeometryFactoryHolder;
 
 #include "ServerPhysicsEntity.h"
 #include "ServerStaticEntity.h"
 #include "ServerPlayerEntity.h"
 
-static EntityFactory<ServerPhysicsEntity>
+static GameObjectFactory<ServerPhysicsEntity>
 	server_physics_item("physics_item");
 
-static EntityFactory<ServerStaticEntity>
+static GameObjectFactory<ServerStaticEntity>
 	server_static_item("static_item");
 
-static EntityFactory<ServerPlayerEntity>
+static GameObjectFactory<ServerPlayerEntity>
 	server_player("player");
 
 #include "shared\BaseRenderedGeometry.h"
 #include "ServerStaticGeometry.h"
 
-static GeometryFactory<ServerStaticGeometry>
+static GameObjectFactory<ServerStaticGeometry>
 	server_geometry("static_brush");
 
-static GeometryFactory<BaseRenderedGeometry>
+static GameObjectFactory<BaseRenderedGeometry>
 	server_detail("detail_brush");

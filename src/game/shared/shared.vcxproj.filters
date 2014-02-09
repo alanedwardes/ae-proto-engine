@@ -39,12 +39,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EntityFactoryHolder.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
-    <ClCompile Include="GeometryFactoryHolder.cpp">
-      <Filter>Source Files\Systems</Filter>
-    </ClCompile>
     <ClCompile Include="UdpCommunicator.cpp">
       <Filter>Source Files\Network</Filter>
     </ClCompile>
@@ -66,22 +60,13 @@
     <ClCompile Include="Compressor.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="GameObjectFactoryHolder.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\public\headers\shared\Point.h">
       <Filter>Source Files\Data</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\headers\shared\EntityFactoryHolder.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\headers\shared\EntityFactory.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\headers\shared\GeometryFactory.h">
-      <Filter>Source Files\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\public\headers\shared\GeometryFactoryHolder.h">
-      <Filter>Source Files\Systems</Filter>
     </ClInclude>
     <ClInclude Include="..\..\public\headers\shared\TcpCommunicator.h">
       <Filter>Source Files\Network</Filter>
@@ -139,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="..\..\public\headers\shared\Compressor.h">
       <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\GameObjectFactory.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\GameObjectFactoryHolder.h">
+      <Filter>Source Files\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

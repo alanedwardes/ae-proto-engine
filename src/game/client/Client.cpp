@@ -3,7 +3,7 @@
 #include "WorldRenderer.h"
 #include "shared\WorldManager.h"
 #include "shared\Manifest.h"
-#include "shared\EntityFactoryHolder.h"
+#include "shared\GameObjectFactoryHolder.h"
 #include "InputManager.h"
 
 // Global resources

@@ -2,8 +2,7 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
-#include "EntityFactory.h"
-#include "GeometryFactory.h"
+#include "GameObjectFactory.h"
 #include "WorldManager.h"
 
 #include "stlplus\file_system.hpp"
@@ -12,44 +11,31 @@ extern Manifest *g_pSettings;
 
 void WorldManager::AddEntity(BaseGameObject *pEntity)
 {
-	pEntity->id = m_oEntities.size();
-	m_oEntities.push_back(pEntity);
+	pEntity->id = m_oGameObjects.size();
 	m_oGameObjects.push_back(pEntity);
-}
-
-void WorldManager::AddGeometry(BaseGameObject *pGeometry)
-{
-	m_oGeometry.push_back(pGeometry);
-	m_oGameObjects.push_back(pGeometry);
 }
 
 void WorldManager::RemoveEntityById(signed int oEntityId)
 {
-	auto pEntity = m_oEntities[oEntityId];
-	m_oEntities[oEntityId] = nullptr;
+	auto pEntity = m_oGameObjects[oEntityId];
+	m_oGameObjects[oEntityId] = nullptr;
 	delete pEntity;
 }
 
 BaseGameObject* WorldManager::GetEntityById(signed int oEntityId)
 {
-	if (oEntityId < m_oEntities.size())
-		return m_oEntities[oEntityId];
+	if (oEntityId < m_oGameObjects.size())
+		return m_oGameObjects[oEntityId];
 	else
 		return nullptr;
 }
 
 void WorldManager::RemoveAllEntities()
 {
-    for (auto *pEntity : m_oEntities)
+    for (auto *pEntity : m_oGameObjects)
         delete pEntity;
 
-    m_oEntities.clear();
-	m_oGameObjects.clear();
-}
-
-std::vector<BaseGameObject*> WorldManager::GetEntities() const
-{
-	return m_oEntities;
+    m_oGameObjects.clear();
 }
 
 std::vector<BaseGameObject*> WorldManager::GetGameObjects() const
@@ -80,7 +66,7 @@ void WorldManager::LoadLevel(std::string szLevelFilename)
 	std::vector<Manifest> oGeometryManifests = m_oLevelManifest.GetManifestList("geometry");
 	for (auto oGeometryManifest : oGeometryManifests)
 	{
-		CreateGeometry(oGeometryManifest);
+		CreateEntity(oGeometryManifest);
 	}
 
 	m_szLevelFilename = szLevelFilename;
@@ -111,15 +97,6 @@ BaseGameObject* WorldManager::CreateEntity(int iTypeId, Manifest oManifest)
 	return CreateEntityFromFactory(pEntityFactory, oManifest);
 }
 
-BaseGameObject* WorldManager::CreateGeometry(Manifest oManifest)
-{
-	auto szGeometryManifestType = oManifest.GetString("type");
-	auto pGeometryFactory = GetGeometryFactory(szGeometryManifestType);
-	assert(pGeometryFactory);
-	auto pGeometry = CreateGeometryFromFactory(pGeometryFactory, oManifest);
-	return pGeometry;
-}
-
 BaseGameObject* WorldManager::CreateEntityFromFactory(EntityFactoryBase *pFactoryBase, Manifest oManifest)
 {
 	if (pFactoryBase == nullptr)
@@ -135,25 +112,9 @@ BaseGameObject* WorldManager::CreateEntityFromFactory(EntityFactoryBase *pFactor
 	return pEntity;
 }
 
-BaseGameObject* WorldManager::CreateGeometryFromFactory(GeometryFactoryBase *pFactoryBase, Manifest oManifest)
-{
-	assert(pFactoryBase);
-
-	BaseGameObject *pGeometry = pFactoryBase->Create();
-	pGeometry->LoadManifest(oManifest);
-	pGeometry->Init();
-	AddGeometry(pGeometry);
-	return pGeometry;
-}
-
 std::string WorldManager::LevelName()
 {
 	return m_oLevelManifest.GetString("name", m_szLevelFilename);
-}
-
-void WorldManager::AddGeometryFactory(GeometryFactoryBase *pGeometryFactory, const char *szTypeName)
-{
-	m_oGeometryFactoryTypeNameMap[szTypeName] = pGeometryFactory;
 }
 
 void WorldManager::AddEntityFactory(EntityFactoryBase *pEntityFactory, const char *szTypeName, int iTypeId)
@@ -170,9 +131,4 @@ EntityFactoryBase* WorldManager::GetEntityFactory(std::string szTypeName)
 EntityFactoryBase* WorldManager::GetEntityFactory(int iTypeId)
 {
 	return m_oEntityFactoryTypeIdMap[iTypeId];
-}
-
-GeometryFactoryBase* WorldManager::GetGeometryFactory(std::string szTypeName)
-{
-	return m_oGeometryFactoryTypeNameMap[szTypeName];
 }

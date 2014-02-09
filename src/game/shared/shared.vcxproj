@@ -87,8 +87,7 @@
   <ItemGroup>
     <ClCompile Include="BaseGameObject.cpp" />
     <ClCompile Include="Compressor.cpp" />
-    <ClCompile Include="EntityFactoryHolder.cpp" />
-    <ClCompile Include="GeometryFactoryHolder.cpp" />
+    <ClCompile Include="GameObjectFactoryHolder.cpp" />
     <ClCompile Include="Manifest.cpp" />
     <ClCompile Include="StreamSerialiser.cpp" />
     <ClCompile Include="TcpCommunicator.cpp" />
@@ -103,10 +102,8 @@
     <ClInclude Include="..\..\public\headers\shared\Communicator.h" />
     <ClInclude Include="..\..\public\headers\shared\Compressor.h" />
     <ClInclude Include="..\..\public\headers\shared\Debug.h" />
-    <ClInclude Include="..\..\public\headers\shared\EntityFactory.h" />
-    <ClInclude Include="..\..\public\headers\shared\EntityFactoryHolder.h" />
-    <ClInclude Include="..\..\public\headers\shared\GeometryFactory.h" />
-    <ClInclude Include="..\..\public\headers\shared\GeometryFactoryHolder.h" />
+    <ClInclude Include="..\..\public\headers\shared\GameObjectFactory.h" />
+    <ClInclude Include="..\..\public\headers\shared\GameObjectFactoryHolder.h" />
     <ClInclude Include="..\..\public\headers\shared\INetworked.h" />
     <ClInclude Include="..\..\public\headers\shared\IRendered.h" />
     <ClInclude Include="..\..\public\headers\shared\ISimulated.h" />

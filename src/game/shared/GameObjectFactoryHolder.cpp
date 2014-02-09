@@ -1,4 +1,4 @@
-#include "EntityFactoryHolder.h"
+#include "GameObjectFactoryHolder.h"
 #include "WorldManager.h"
 
 extern WorldManager g_oWorldManager;

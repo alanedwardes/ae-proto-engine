@@ -82,7 +82,7 @@ void ServerUpdateManager::SendClientUpdate(UpdateClient_t *updateClient)
 {
 	CommunicatorUpdate_t update;
 	update.host = updateClient->host;
-	auto oEntities = g_oWorldManager.GetEntities();
+	auto oEntities = g_oWorldManager.GetGameObjects();
 	auto iEntitiesInPacket = 0;
 	for (auto pEntity : oEntities)
 	{

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BaseGameObject.h"
-#include "EntityFactoryHolder.h"
+#include "GameObjectFactoryHolder.h"
 
 class EntityFactoryBase
 {
@@ -10,10 +10,10 @@ public:
 };
 
 template <class T>
-class EntityFactory : EntityFactoryBase
+class GameObjectFactory : EntityFactoryBase
 {
 public:
-	EntityFactory(const char *szTypeName)
+	GameObjectFactory(const char *szTypeName)
 	{
 		m_szTypeName = szTypeName;
 		m_iTypeId = g_oEntityFactoryHolder.AddEntityFactory(this, szTypeName);
