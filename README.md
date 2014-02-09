@@ -1,7 +1,12 @@
 ae-proto-engine
 ===============
 
-Little prototype networked game engine written in C++. Features a client/server networked architecture, physics simulation with Box2D, and renderer written with SFML.
+Little prototype networked game engine written in C++:
+
+* Cient/server networked architecture
+* Physics simulation with Box2D 
+* Renderer written with SFML
+* Levels described with regular JSON
 
 ![Screenshot of the engine running.](screenshot.png)
 
