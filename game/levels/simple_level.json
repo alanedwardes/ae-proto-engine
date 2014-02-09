@@ -1,0 +1,128 @@
+{
+	"name": "Simple Level",
+	"geometry": [{
+		"type": "static_brush",
+		"position": [-250, 500],
+		"render": [{
+			"points": [
+				[0, 0],
+				[0, 500],
+				[2000, 500],
+				[2000, 90]
+			],
+			"texture": "ground.png"
+		}],
+		"simulate": [{
+			"points": [
+				[0, 0],
+				[0, 500],
+				[2000, 500],
+				[2000, 90]
+			],
+			"friction": 0.66
+		}]
+	}, {
+		"type": "static_brush",
+		"position": [-350, -2000],
+		"render": [{
+			"size": [100, 3000],
+			"texture": "ground.png"
+		}],
+		"simulate": [{
+			"size": [100, 3000],
+			"friction": 0.66
+		}]
+	}, {
+		"type": "static_brush",
+		"position": [1750, -2000],
+		"render": [{
+			"size": [100, 3000],
+			"texture": "ground.png"
+		}],
+		"simulate": [{
+			"size": [100, 3000],
+			"friction": 0.66
+		}]
+	}, {
+		"type": "detail_brush",
+		"position": [-250, 490],
+		"rotation": 5,
+		"render": [{
+			"size": [1000, 10],
+			"texture": "grass.png"
+		}]
+	}],
+	"entities": [{
+		"type": "physics_item",
+		"name": "box2",
+		"model": "box.json",
+		"rotation": 90,
+		"position": [70, 70]
+	}, {
+		"type": "physics_item",
+		"name": "box2",
+		"model": "box.json",
+		"rotation": 10,
+		"position": [140, 70]
+	}, {
+		"type": "physics_item",
+		"name": "box3",
+		"model": "box.json",
+		"position": [70, 140]
+	}, {
+		"type": "physics_item",
+		"name": "box4",
+		"model": "box.json",
+		"position": [140, 140]
+	}, {
+		"type": "physics_item",
+		"name": "box4",
+		"model": "box.json",
+		"position": [300, 140]
+	}, {
+		"type": "physics_item",
+		"name": "box4",
+		"model": "box.json",
+		"position": [390, 140]
+	}, {
+		"type": "physics_item",
+		"name": "box5",
+		"model": "box.json",
+		"position": [0, -50]
+	}, {
+		"type": "physics_item",
+		"name": "box5",
+		"model": "box_large.json",
+		"position": [0, 250]
+	}, {
+		"type": "physics_item",
+		"name": "box5",
+		"model": "box_large.json",
+		"position": [-100, 250]
+	}, {
+		"type": "physics_item",
+		"name": "tree",
+		"model": "tree.json",
+		"position": [40, 445]
+	}, {
+		"type": "physics_item",
+		"name": "tree",
+		"model": "tree.json",
+		"position": [20, 345]
+	}, {
+		"type": "physics_item",
+		"name": "tree",
+		"model": "tree.json",
+		"position": [20, 0]
+	}, {
+		"type": "static_item",
+		"name": "tree",
+		"model": "tree.json",
+		"position": [140, 445]
+	}, {
+		"type": "static_item",
+		"name": "tree",
+		"model": "tree.json",
+		"position": [240, 445]
+	}]
+}

@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{8de2a0c8-6a31-491d-a473-e5370b23b318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Systems">
+      <UniqueIdentifier>{bfbe7538-e805-4e8d-af2b-442371e86fb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{10ccb90a-c4e0-4400-ab23-8b490d5cd7e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{2642537e-4fae-4b79-9401-488478bbda04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Objects">
+      <UniqueIdentifier>{4aa211b9-01dd-4f5a-b7fb-0c93b793795a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Objects\BaseEntities">
+      <UniqueIdentifier>{c0abcd3d-4a6d-443a-909f-d0a169ba1f48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Objects\BaseGeometry">
+      <UniqueIdentifier>{0235e258-8f4a-4a87-b08e-f55807627d2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game Objects\Behaviours">
+      <UniqueIdentifier>{37663a10-adee-462d-b6bb-ebadd1d447bd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EntityFactoryHolder.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryFactoryHolder.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="UdpCommunicator.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="TcpCommunicator.cpp">
+      <Filter>Source Files\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Manifest.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamSerialiser.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldManager.cpp">
+      <Filter>Source Files\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseGameObject.cpp">
+      <Filter>Source Files\Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Compressor.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\public\headers\shared\Point.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\EntityFactoryHolder.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\EntityFactory.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\GeometryFactory.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\GeometryFactoryHolder.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\TcpCommunicator.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\UdpCommunicator.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Communicator.h">
+      <Filter>Source Files\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\StreamSerialiser.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Manifest.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\UpdateManager.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\WorldManager.h">
+      <Filter>Source Files\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Vector.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\ISimulated.h">
+      <Filter>Source Files\Game Objects\Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\IRendered.h">
+      <Filter>Source Files\Game Objects\Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\INetworked.h">
+      <Filter>Source Files\Game Objects\Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\BasePlayerEntity.h">
+      <Filter>Source Files\Game Objects\BaseEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\BaseGameObject.h">
+      <Filter>Source Files\Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\BaseSimulatedEntity.h">
+      <Filter>Source Files\Game Objects\BaseEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\BaseSimulatedGeometry.h">
+      <Filter>Source Files\Game Objects\BaseGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Key.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\BaseRenderedGeometry.h">
+      <Filter>Source Files\Game Objects\BaseGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Debug.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Compressor.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

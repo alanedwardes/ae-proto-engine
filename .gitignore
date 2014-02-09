@@ -1,0 +1,31 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Visual Studio files
+*.suo
+*.sdf
+*.opensdf
+*.aps
+/src/game/shared/Release
+/src/client_exectuable/Debug
+/src/client_exectuable/Release
+/src/server_executable/Release
+/src/game/client/Release
+/src/game/server/Release
+/src/*.vsp
+/src/server_executable/Debug
+/src/*.psess
+/src/game/shared/Debug
+/src/game/client/Debug
+/src/game/server/Debug

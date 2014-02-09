@@ -1,0 +1,12 @@
+{
+	"simulate": [{
+		"size": [90, 90],
+		"mass": 100,
+		"friction": 0.3
+	}],
+	"render": [{
+		"size": [90, 90],
+		"fill": true,
+		"texture": "box/box.png"
+	}]
+}

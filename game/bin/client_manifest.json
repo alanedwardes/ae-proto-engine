@@ -1,0 +1,12 @@
+{
+   "client_antialias" : 6,
+   "client_icon" : "client_icon.png",
+   "client_size" : [ 802.0, 419.0 ],
+   "connect_host" : "localhost",
+   "connect_port" : 1235,
+   "debug" : false,
+   "debug_font" : "inconsolata.otf",
+   "fps_limit" : 60,
+   "level_directory" : "../levels",
+   "model_directory" : "../models"
+}

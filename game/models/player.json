@@ -1,0 +1,12 @@
+{
+	"simulate": [{
+		"size": [25, 60],
+		"mass": 1000,
+		"fixed_rotation": true,
+		"friction": 0.66
+	}],
+	"render": [{
+		"size": [32, 62],
+		"texture": "player/player.png"
+	}]
+}

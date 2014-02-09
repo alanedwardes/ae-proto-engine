@@ -1,0 +1,8 @@
+{
+	"level_directory": "../levels",
+	"model_directory": "../models",
+	
+	// Listen settings
+	"listen_port": 1235,
+	"level_name": "simple_level.json"
+}

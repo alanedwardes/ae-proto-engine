@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "game\server\server.vcxproj", "{9E590263-0511-4BFC-9A07-B0ACD566D2B2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094} = {BC2D67CC-C0BA-4849-B453-A6B617C91094}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "game\client\client.vcxproj", "{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094} = {BC2D67CC-C0BA-4849-B453-A6B617C91094}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server_executable", "server_executable\server_executable.vcxproj", "{CC43196F-0E3B-4325-BBF1-3A84E4B64357}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9E590263-0511-4BFC-9A07-B0ACD566D2B2} = {9E590263-0511-4BFC-9A07-B0ACD566D2B2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client_exectuable", "client_exectuable\client_exectuable.vcxproj", "{5EB69426-DA4A-44D3-83C4-4A92A135A509}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB} = {61FE80B9-6C44-4764-A43C-24AB8D1E8AFB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shared", "game\shared\shared.vcxproj", "{BC2D67CC-C0BA-4849-B453-A6B617C91094}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server Projects", "Server Projects", "{608BE839-6647-4492-BF5C-D2BA33637616}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client Projects", "Client Projects", "{27802424-F830-4FF2-A7B5-9555A900F9B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Projects", "Shared Projects", "{87F13E5E-B343-424E-B108-D2CBA4209DF0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E590263-0511-4BFC-9A07-B0ACD566D2B2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9E590263-0511-4BFC-9A07-B0ACD566D2B2}.Debug|Win32.Build.0 = Debug|Win32
+		{9E590263-0511-4BFC-9A07-B0ACD566D2B2}.Release|Win32.ActiveCfg = Release|Win32
+		{9E590263-0511-4BFC-9A07-B0ACD566D2B2}.Release|Win32.Build.0 = Release|Win32
+		{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB}.Debug|Win32.Build.0 = Debug|Win32
+		{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB}.Release|Win32.ActiveCfg = Release|Win32
+		{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB}.Release|Win32.Build.0 = Release|Win32
+		{CC43196F-0E3B-4325-BBF1-3A84E4B64357}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CC43196F-0E3B-4325-BBF1-3A84E4B64357}.Debug|Win32.Build.0 = Debug|Win32
+		{CC43196F-0E3B-4325-BBF1-3A84E4B64357}.Release|Win32.ActiveCfg = Release|Win32
+		{CC43196F-0E3B-4325-BBF1-3A84E4B64357}.Release|Win32.Build.0 = Release|Win32
+		{5EB69426-DA4A-44D3-83C4-4A92A135A509}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5EB69426-DA4A-44D3-83C4-4A92A135A509}.Debug|Win32.Build.0 = Debug|Win32
+		{5EB69426-DA4A-44D3-83C4-4A92A135A509}.Release|Win32.ActiveCfg = Release|Win32
+		{5EB69426-DA4A-44D3-83C4-4A92A135A509}.Release|Win32.Build.0 = Release|Win32
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094}.Debug|Win32.Build.0 = Debug|Win32
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094}.Release|Win32.ActiveCfg = Release|Win32
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CC43196F-0E3B-4325-BBF1-3A84E4B64357} = {608BE839-6647-4492-BF5C-D2BA33637616}
+		{9E590263-0511-4BFC-9A07-B0ACD566D2B2} = {608BE839-6647-4492-BF5C-D2BA33637616}
+		{5EB69426-DA4A-44D3-83C4-4A92A135A509} = {27802424-F830-4FF2-A7B5-9555A900F9B7}
+		{61FE80B9-6C44-4764-A43C-24AB8D1E8AFB} = {27802424-F830-4FF2-A7B5-9555A900F9B7}
+		{BC2D67CC-C0BA-4849-B453-A6B617C91094} = {87F13E5E-B343-424E-B108-D2CBA4209DF0}
+	EndGlobalSection
+EndGlobal
