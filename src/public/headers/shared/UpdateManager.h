@@ -25,6 +25,4 @@ public:
 	virtual void ReceiveUpdates() = 0;
 	virtual void SendUpdates() = 0;
 	virtual void ProcessUpdate(CommunicatorUpdate_t update) = 0;
-protected:
-	Communicator *m_pCommunicator;
 };

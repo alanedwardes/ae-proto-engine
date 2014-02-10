@@ -5,10 +5,8 @@
 #include <sstream>
 #include <mutex>
 
-namespace sf
-{
-	class IpAddress;
-}
+// Forward declaration
+namespace sf { class IpAddress; }
 
 // A port number
 typedef unsigned short CommunicatorPort_t;

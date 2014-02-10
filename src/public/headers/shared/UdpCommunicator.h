@@ -5,6 +5,7 @@
 #include <thread>
 #include <vector>
 
+// Forward declaration
 namespace sf { class UdpSocket; }
 
 class UdpCommunicator : public Communicator

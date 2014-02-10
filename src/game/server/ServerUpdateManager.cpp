@@ -15,17 +15,21 @@ extern Manifest *g_pSettings;
 ServerUpdateManager::ServerUpdateManager(int iListenPort)
 {
 	assert(iListenPort > 0);
-	assert(m_pCommunicator == nullptr);
+	assert(m_pReceivingCommunicator == nullptr && m_pSendingCommunicator == nullptr);
 
 	m_lStartTime = std::clock();
 	m_iLastUpdateClientId = 0;
-	m_pCommunicator = new UdpCommunicator();
-	m_pCommunicator->Bind(iListenPort);
+
+	m_pSendingCommunicator = new UdpCommunicator();
+
+	m_pReceivingCommunicator = new UdpCommunicator();
+	m_pReceivingCommunicator->Bind(iListenPort);
 }
 
 ServerUpdateManager::~ServerUpdateManager()
 {
-	delete m_pCommunicator;
+	delete m_pReceivingCommunicator;
+	delete m_pSendingCommunicator;
 }
 
 int ServerUpdateManager::GenerateUpdateClientId()
@@ -35,9 +39,9 @@ int ServerUpdateManager::GenerateUpdateClientId()
 
 void ServerUpdateManager::ReceiveUpdates()
 {
-	while (m_pCommunicator->Receive())
+	while (m_pReceivingCommunicator->Receive())
 	{
-		auto oUpdate = m_pCommunicator->GetUpdate();
+		auto oUpdate = m_pReceivingCommunicator->GetUpdate();
 		ProcessUpdate(oUpdate);
 	}
 }
@@ -103,7 +107,7 @@ void ServerUpdateManager::SendInitialClientUpdate(UpdateClient_t *updateClient)
 	CommunicatorUpdate_t update;
 	update.host = updateClient->host;
 	update.data << SERVER_UPDATE_INITIAL << updateClient->updateClientId << g_oWorldManager.LevelFilename();
-	m_pCommunicator->SendPacket(update);
+	m_pSendingCommunicator->SendPacket(update);
 
 	// Set the last sent update type
 	updateClient->lastServerUpdate = SERVER_UPDATE_INITIAL;
@@ -142,7 +146,7 @@ void ServerUpdateManager::SendClientUpdate(UpdateClient_t *updateClient)
 		}
 	}
 	updateClient->lastServerUpdate = SERVER_UPDATE_FULL;
-	m_pCommunicator->SendPacket(update);
+	m_pSendingCommunicator->SendPacket(update);
 }
 
 void ServerUpdateManager::ProcessUpdate(CommunicatorUpdate_t update)

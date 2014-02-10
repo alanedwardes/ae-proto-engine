@@ -66,7 +66,7 @@ void UdpCommunicator::ReceiveThread(sf::UdpSocket *pUdpSocket,
 			pUpdateBuffer->push_back(oUpdate);
 			pReceivingThreadMutex->unlock();
 		}
-	} while(true);
+	} while(status == sf::Socket::Done);
 }
 
 CommunicatorUpdate_t UdpCommunicator::GetUpdate()

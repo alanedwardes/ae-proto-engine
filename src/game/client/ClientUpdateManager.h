@@ -28,4 +28,6 @@ private:
 	CommunicatorUpdate_t m_oLastSentUpdate;
 	// Set by the server
 	int m_iUpdateClientId;
+	// The socket
+	Communicator *m_pCommunicator;
 };

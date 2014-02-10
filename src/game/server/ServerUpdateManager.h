@@ -52,4 +52,6 @@ private:
 	std::vector<UpdateClient_t*> m_oUpdateClients;
 	int m_iLastUpdateClientId;
 	long m_lStartTime;
+	Communicator *m_pSendingCommunicator;
+	Communicator *m_pReceivingCommunicator;
 };
