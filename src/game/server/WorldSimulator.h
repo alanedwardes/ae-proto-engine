@@ -20,6 +20,9 @@ public:
 	virtual void CreateStaticBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody);
 	virtual void ApplyForce(unsigned int iBodyId, Point poForce);
 private:
+	virtual void PreSimulate();
+	virtual void PostSimulate();
+
 	unsigned int AddBodyToDynamicSimulatedObjects(SimulationDefinition *pSimulationDefinition)
 	{
 		unsigned int iIndex = m_oSimulationDefinitions.size();

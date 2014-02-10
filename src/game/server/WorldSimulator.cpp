@@ -122,18 +122,41 @@ b2FixtureDef WorldSimulator::CreateFixture(SimulatedBody *pSimulatedBody)
 	return fixtureDef;
 }
 
-void WorldSimulator::Simulate(float flTimeStep)
+void WorldSimulator::PreSimulate()
 {
 	for (auto pDef : m_oSimulationDefinitions)
 	{
+		if (pDef->base->deleted)
+		{
+			if (pDef->physBody != nullptr)
+			{
+				pWorld->DestroyBody(pDef->physBody);
+				pDef->physBody = nullptr;
+			}
+			continue;
+		}
+
  		pDef->simulated->PreSimulate();
 		pDef->physBody->SetLinearVelocity(POINT_TO_BOX2D(pDef->simBody->linearVelocity));
 	}
+}
+
+void WorldSimulator::Simulate(float flTimeStep)
+{
+	PreSimulate();
 
 	pWorld->Step(flTimeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
+	PostSimulate();
+}
+
+void WorldSimulator::PostSimulate()
+{
 	for (auto pDef : m_oSimulationDefinitions)
 	{
+		if (pDef->base->deleted && pDef->physBody == nullptr)
+			continue;
+
 		pDef->base->position = POINT_FROM_BOX2D(pDef->physBody->GetPosition());
 		pDef->base->rotation = RADIANS_TO_DEGREES(pDef->physBody->GetAngle());
 		pDef->simBody->linearVelocity = POINT_FROM_BOX2D(pDef->physBody->GetLinearVelocity());

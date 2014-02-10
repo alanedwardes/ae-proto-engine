@@ -85,6 +85,9 @@ UpdateClient_t* ServerUpdateManager::GetUpdateClientByHostAddress(CommunicatorHo
 {
 	for (auto i = 0; i != m_oUpdateClients.size(); i++)
 	{
+		if (m_oUpdateClients[i] == nullptr)
+			continue;
+
 		if (m_oUpdateClients[i]->host == hostAddress)
 		{
 			return m_oUpdateClients[i];
