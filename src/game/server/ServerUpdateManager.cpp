@@ -7,13 +7,17 @@
 #include "shared\BasePlayerEntity.h"
 #include "shared\Key.h"
 
+#include <chrono>
+
 extern WorldManager g_oWorldManager;
+extern Manifest *g_pSettings;
 
 ServerUpdateManager::ServerUpdateManager(int iListenPort)
 {
 	assert(iListenPort > 0);
-	assert(m_pCommunicator == 0);
+	assert(m_pCommunicator == nullptr);
 
+	m_lStartTime = std::clock();
 	m_iLastUpdateClientId = 0;
 	m_pCommunicator = new UdpCommunicator();
 	m_pCommunicator->Bind(iListenPort);
@@ -38,19 +42,43 @@ void ServerUpdateManager::ReceiveUpdates()
 	}
 }
 
+long ServerUpdateManager::GetCurrentTime()
+{
+	return (std::clock() - m_lStartTime);
+}
+
 void ServerUpdateManager::SendUpdates()
 {
-	for (auto updateClient : m_oUpdateClients)
+	long lCurrentTime = GetCurrentTime();
+	int iClientTimeout = g_pSettings->GetInt("client_timeout", 10) * 1000;
+
+	for (auto pUpdateClient : m_oUpdateClients)
 	{
-		if (updateClient->lastClientUpdate == CLIENT_UPDATE_INITIAL)
+		if (pUpdateClient == nullptr)
+			continue;
+
+		// Kick inactive clients
+		if (pUpdateClient->lastReceivedUpdateTime < lCurrentTime - iClientTimeout)
 		{
-			SendInitialClientUpdate(updateClient);
+			KickClient(pUpdateClient);
+			continue;
+		}
+
+		if (pUpdateClient->lastClientUpdate == CLIENT_UPDATE_INITIAL)
+		{
+			SendInitialClientUpdate(pUpdateClient);
 		}
 		else
 		{
-			SendClientUpdate(updateClient);
+			SendClientUpdate(pUpdateClient);
 		}
 	}
+}
+
+void ServerUpdateManager::KickClient(UpdateClient_t *pUpdateClient)
+{
+	m_oUpdateClients[pUpdateClient->updateClientId] = nullptr;
+	pUpdateClient->entity->deleted = true;
 }
 
 UpdateClient_t* ServerUpdateManager::GetUpdateClientByHostAddress(CommunicatorHostAddress_t hostAddress)
@@ -98,9 +126,17 @@ void ServerUpdateManager::SendClientUpdate(UpdateClient_t *updateClient)
 		if (!pNetworked)
 			continue;
 
-		update.data << pEntity->id;
-		update.data << pEntity->typeId;
-		update.data << pNetworked->Serialise();
+		// If the entity is deleted, send the id as negative
+		if (pEntity->deleted)
+		{
+			update.data << -pEntity->id;
+		}
+		else
+		{
+			update.data << pEntity->id;
+			update.data << pEntity->typeId;
+			update.data << pNetworked->Serialise();
+		}
 	}
 	updateClient->lastServerUpdate = SERVER_UPDATE_FULL;
 	m_pCommunicator->SendPacket(update);
@@ -134,7 +170,7 @@ void ServerUpdateManager::ProcessUpdate(CommunicatorUpdate_t update)
 
 void ServerUpdateManager::ProcessInitialClientUpdate(CommunicatorUpdate_t update)
 {
-	//Debug::DebugMessage("Processing initial update from %", update.host.toString());
+	Debug::DebugMessage("Processing initial update from %", update.host.toString());
 
 	auto *pExistingUpdateClient = GetUpdateClientByHostAddress(update.host);
 	if (pExistingUpdateClient)
@@ -150,12 +186,13 @@ void ServerUpdateManager::ProcessInitialClientUpdate(CommunicatorUpdate_t update
 	pUpdateClient->lastClientUpdate = CLIENT_UPDATE_INITIAL;
 	pUpdateClient->entity = pPlayer;
 	pUpdateClient->updateClientId = updateClientId;
+	pUpdateClient->lastReceivedUpdateTime = GetCurrentTime();
 	m_oUpdateClients.push_back(pUpdateClient);
 }
 
 void ServerUpdateManager::ProcessClientUpdate(CommunicatorUpdate_t update)
 {
-	//Debug::DebugMessage("Processing regular update from %", update.host.toString());
+	Debug::DebugMessage("Processing regular update from %", update.host.toString());
 
 	auto pUpdateClient = GetUpdateClientByHostAddress(update.host);
 	CommunicatorData_t data = update.data;
@@ -174,4 +211,5 @@ void ServerUpdateManager::ProcessClientUpdate(CommunicatorUpdate_t update)
 
 	pUpdateClient->entity->pressedKeys = iPressedKeys;
 	pUpdateClient->lastClientUpdate = CLIENT_UPDATE_FULL;
+	pUpdateClient->lastReceivedUpdateTime = GetCurrentTime();
 }

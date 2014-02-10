@@ -15,13 +15,6 @@ void WorldManager::AddEntity(BaseGameObject *pEntity)
 	m_oGameObjects.push_back(pEntity);
 }
 
-void WorldManager::RemoveEntityById(signed int oEntityId)
-{
-	auto pEntity = m_oGameObjects[oEntityId];
-	m_oGameObjects[oEntityId] = nullptr;
-	delete pEntity;
-}
-
 BaseGameObject* WorldManager::GetEntityById(signed int oEntityId)
 {
 	if (oEntityId < m_oGameObjects.size())

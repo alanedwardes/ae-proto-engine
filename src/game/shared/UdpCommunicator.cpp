@@ -53,7 +53,7 @@ void UdpCommunicator::ReceiveThread(sf::UdpSocket *pUdpSocket,
 
 		if (status != sf::Socket::Done)
 		{
-			Debug::WarningMessage("Socket disconnected (%i)", status);
+			Debug::WarningMessage("Socket disconnected (%)", status);
 		}
 		else
 		{
@@ -66,7 +66,7 @@ void UdpCommunicator::ReceiveThread(sf::UdpSocket *pUdpSocket,
 			pUpdateBuffer->push_back(oUpdate);
 			pReceivingThreadMutex->unlock();
 		}
-	} while(status == sf::Socket::Done);
+	} while(true);
 }
 
 CommunicatorUpdate_t UdpCommunicator::GetUpdate()

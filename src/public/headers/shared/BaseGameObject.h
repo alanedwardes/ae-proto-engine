@@ -19,4 +19,6 @@ public:
 
 	int typeId;
 	std::string typeName;
+
+	bool deleted;
 };

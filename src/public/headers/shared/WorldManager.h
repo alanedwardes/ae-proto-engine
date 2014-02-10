@@ -25,7 +25,6 @@ public:
 	virtual EntityFactoryBase* GetEntityFactory(std::string szTypeName);
 	virtual EntityFactoryBase* GetEntityFactory(int iTypeId);
 	virtual BaseGameObject* GetEntityById(signed int oEntityId);
-	virtual void RemoveEntityById(signed int oEntityId);
 private:
 	virtual void AddEntity(BaseGameObject *pEntity);
 	virtual BaseGameObject* CreateEntityFromFactory(EntityFactoryBase *pFactoryBase, Manifest oManifest);

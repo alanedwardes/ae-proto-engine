@@ -131,17 +131,17 @@ void ClientUpdateManager::ProcessServerUpdate(CommunicatorData_t data)
 		int oEntityId;
 		data >> oEntityId;
 
-		// Second is entity type
-		int iEntityType;
-		data >> iEntityType;
-
-		// Third is the serialised entity data
-		std::string szSerialised;
-		data >> szSerialised;
-
 		// If the ID is positive
 		if (oEntityId >= 0)
 		{
+			// Second is entity type
+			int iEntityType;
+			data >> iEntityType;
+
+			// Third is the serialised entity data
+			std::string szSerialised;
+			data >> szSerialised;
+
 			// Try to find it
 			auto pEntity = g_oWorldManager.GetEntityById(oEntityId);
 			if (pEntity == nullptr)
@@ -169,7 +169,11 @@ void ClientUpdateManager::ProcessServerUpdate(CommunicatorData_t data)
 			auto iRemovalId = abs(oEntityId);
 
 			// Remove it, after using abs() to make positive
-			g_oWorldManager.RemoveEntityById(iRemovalId);
+			auto pEntity = g_oWorldManager.GetEntityById(iRemovalId);
+			if (pEntity != nullptr)
+			{
+				pEntity->deleted = true;
+			}
 		}
 	}
 }

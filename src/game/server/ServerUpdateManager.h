@@ -16,6 +16,8 @@ struct UpdateClient_t
 
 	CommunicatorHostAddress_t host;
 
+	long lastReceivedUpdateTime;
+
 	BasePlayerEntity *entity;
 
 	int updateClientId;
@@ -35,8 +37,11 @@ public:
 	virtual int GenerateUpdateClientId();
 	virtual void ReceiveUpdates();
 	virtual void SendUpdates();
+	virtual long GetCurrentTime();
 	virtual void ProcessUpdate(CommunicatorUpdate_t update);
 private:
+	virtual void KickClient(UpdateClient_t *pUpdateClient);
+
 	virtual UpdateClient_t* GetUpdateClientByHostAddress(CommunicatorHostAddress_t hostAddress);
 
 	virtual void ProcessInitialClientUpdate(CommunicatorUpdate_t update);
@@ -46,4 +51,5 @@ private:
 	virtual void SendClientUpdate(UpdateClient_t *updateClient);
 	std::vector<UpdateClient_t*> m_oUpdateClients;
 	int m_iLastUpdateClientId;
+	long m_lStartTime;
 };

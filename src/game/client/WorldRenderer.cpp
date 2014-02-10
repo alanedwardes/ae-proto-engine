@@ -82,6 +82,9 @@ void WorldRenderer::RenderEntities()
 	auto oEntities = g_oWorldManager.GetGameObjects();
 	for (auto pEntity : oEntities)
 	{
+		if (pEntity->deleted)
+			continue;
+
 		auto pRenderable = dynamic_cast<IRendered*>(pEntity);
 		if (pRenderable)
 		{
@@ -101,13 +104,18 @@ void WorldRenderer::RenderEntities()
 	}
 
 	if (g_pSettings->GetBool("debug"))
+	{
 		for (auto pEntity : oEntities)
 		{
+			if (pEntity->deleted)
+				continue;
+
 			DrawDebugText(pEntity);
 			auto pSimulated = dynamic_cast<ISimulated*>(pEntity);
 			if (pSimulated)
 				DrawSimulated(pEntity, pSimulated);
 		}
+	}
 
 	m_oRenderWindow.setView(oView);
 }
