@@ -2,11 +2,8 @@
 
 #include <vector>
 #include "shared\ISimulated.h"
+#include "box2d\Box2D.h"
 
-class b2World;
-class b2Body;
-struct b2FixtureDef;
-class b2PolygonShape;
 class BaseGameObject;
 struct SimulationDefinition;
 
@@ -14,7 +11,6 @@ class WorldSimulator
 {
 public:
 	WorldSimulator();
-	~WorldSimulator();
 	virtual void Simulate(float flTimeStep);
 	virtual unsigned int CreateDynamicBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody);
 	virtual void CreateStaticBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody);
@@ -33,5 +29,5 @@ private:
 	b2Body CreateBody(BaseGameObject *pEntity);
 	b2FixtureDef CreateFixture(SimulatedBody *pSimulatedBody);
 	std::vector<SimulationDefinition*> m_oSimulationDefinitions;
-	b2World *pWorld;
+	std::unique_ptr<b2World> m_pWorld;
 };

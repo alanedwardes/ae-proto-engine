@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "shared\UpdateManager.h"
 
@@ -33,7 +34,6 @@ class ServerUpdateManager : public UpdateManager
 {
 public:
 	ServerUpdateManager(int iListenPort);
-	~ServerUpdateManager();
 	virtual int GenerateUpdateClientId();
 	virtual void ReceiveUpdates();
 	virtual void SendUpdates();
@@ -52,6 +52,6 @@ private:
 	std::vector<UpdateClient_t*> m_oUpdateClients;
 	int m_iLastUpdateClientId;
 	long m_lStartTime;
-	Communicator *m_pSendingCommunicator;
-	Communicator *m_pReceivingCommunicator;
+	std::unique_ptr<Communicator> m_pSendingCommunicator;
+	std::unique_ptr<Communicator> m_pReceivingCommunicator;
 };

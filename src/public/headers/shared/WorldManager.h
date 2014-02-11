@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <memory>
 #include "Manifest.h"
 
 class BaseGameObject;
@@ -12,6 +13,7 @@ class GeometryFactoryBase;
 class WorldManager
 {
 public:
+	WorldManager();
 	virtual void RemoveAllEntities();
 	virtual void LoadLevel(std::string szLevelFilename);
 	virtual std::vector<BaseGameObject*> GetGameObjects() const;
@@ -32,5 +34,5 @@ private:
 	std::string m_szLevelFilename;
 	std::map<std::string, EntityFactoryBase*> m_oEntityFactoryTypeNameMap;
 	std::map<int, EntityFactoryBase*> m_oEntityFactoryTypeIdMap;
-	Manifest m_oLevelManifest;
+	std::unique_ptr<Manifest> m_pLevelManifest;
 };

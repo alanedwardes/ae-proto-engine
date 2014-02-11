@@ -2,11 +2,12 @@
 
 #include "shared\UpdateManager.h"
 
+#include <memory>
+
 class ClientUpdateManager : public UpdateManager
 {
 public:
 	ClientUpdateManager();
-	~ClientUpdateManager();
 	virtual void SetConnection(std::string szAddress, int iPort);
 	virtual void ReceiveUpdates();
 	virtual void SendUpdates();
@@ -29,5 +30,5 @@ private:
 	// Set by the server
 	int m_iUpdateClientId;
 	// The socket
-	Communicator *m_pCommunicator;
+	std::unique_ptr<Communicator> m_pCommunicator;
 };

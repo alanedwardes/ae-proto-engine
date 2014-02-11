@@ -9,6 +9,11 @@
 
 extern Manifest *g_pSettings;
 
+WorldManager::WorldManager()
+{
+	m_pLevelManifest.reset(new Manifest());
+}
+
 void WorldManager::AddEntity(BaseGameObject *pEntity)
 {
 	pEntity->id = m_oGameObjects.size();
@@ -47,23 +52,23 @@ void WorldManager::LoadLevel(std::string szLevelFilename)
 	std::string szLevelFolder = g_pSettings->GetFolder("level_directory");
 	std::string szLevelPath = stlplus::create_filespec(szLevelFolder, szLevelFilename);
 
-	if (!m_oLevelManifest.ReadManifest(szLevelPath))
+	if (!m_pLevelManifest->ReadManifest(szLevelPath))
 		return;
 
-	std::vector<Manifest> oEntityManifests = m_oLevelManifest.GetManifestList("entities");
+	std::vector<Manifest> oEntityManifests = m_pLevelManifest->GetManifestList("entities");
 	for (auto oEntityManifest : oEntityManifests)
 	{
 		CreateEntity(oEntityManifest);
 	}
 
-	std::vector<Manifest> oGeometryManifests = m_oLevelManifest.GetManifestList("geometry");
+	std::vector<Manifest> oGeometryManifests = m_pLevelManifest->GetManifestList("geometry");
 	for (auto oGeometryManifest : oGeometryManifests)
 	{
 		CreateEntity(oGeometryManifest);
 	}
 
 	m_szLevelFilename = szLevelFilename;
-	std::string szLevelName = m_oLevelManifest.GetString("name", szLevelFilename);
+	std::string szLevelName = m_pLevelManifest->GetString("name", szLevelFilename);
 	Debug::LogMessage("Loaded level %", szLevelName);
 }
 
@@ -107,7 +112,7 @@ BaseGameObject* WorldManager::CreateEntityFromFactory(EntityFactoryBase *pFactor
 
 std::string WorldManager::LevelName()
 {
-	return m_oLevelManifest.GetString("name", m_szLevelFilename);
+	return m_pLevelManifest->GetString("name", m_szLevelFilename);
 }
 
 void WorldManager::AddEntityFactory(EntityFactoryBase *pEntityFactory, const char *szTypeName, int iTypeId)

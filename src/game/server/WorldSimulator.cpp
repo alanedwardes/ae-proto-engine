@@ -3,7 +3,6 @@
 #include "shared\ISimulated.h"
 #include "shared\BaseGameObject.h"
 #include "shared\BaseGameObject.h"
-#include "box2d\Box2D.h"
 
 #define _USE_MATH_DEFINES
 
@@ -30,12 +29,7 @@ struct SimulationDefinition
 WorldSimulator::WorldSimulator()
 {
 	b2Vec2 gravity(0.0f, 9.81f);
-	pWorld = new b2World(gravity);
-}
-
-WorldSimulator::~WorldSimulator()
-{
-	delete pWorld;
+	m_pWorld.reset(new b2World(gravity));
 }
 
 unsigned int WorldSimulator::CreateDynamicBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody)
@@ -47,7 +41,7 @@ unsigned int WorldSimulator::CreateDynamicBody(BaseGameObject *pEntity, Simulate
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 
-	b2Body* pBody = pWorld->CreateBody(&bodyDef);
+	b2Body* pBody = m_pWorld->CreateBody(&bodyDef);
 
 	auto oPolygon = CreatePolygon(pSimulatedBody);
 	auto oFixtureDef = CreateFixture(pSimulatedBody);
@@ -76,7 +70,7 @@ void WorldSimulator::CreateStaticBody(BaseGameObject *pEntity, SimulatedBody *pS
 	oStaticBodyDef.type = b2_staticBody;
 	oStaticBodyDef.allowSleep = true;
 
-	b2Body *pStaticBody = pWorld->CreateBody(&oStaticBodyDef);
+	b2Body *pStaticBody = m_pWorld->CreateBody(&oStaticBodyDef);
 
 	pStaticBody->SetTransform(POINT_TO_BOX2D(pEntity->position),
 		DEGREES_TO_RADIANS(pEntity->rotation));
@@ -130,7 +124,7 @@ void WorldSimulator::PreSimulate()
 		{
 			if (pDef->physBody != nullptr)
 			{
-				pWorld->DestroyBody(pDef->physBody);
+				m_pWorld->DestroyBody(pDef->physBody);
 				pDef->physBody = nullptr;
 			}
 			continue;
@@ -145,7 +139,7 @@ void WorldSimulator::Simulate(float flTimeStep)
 {
 	PreSimulate();
 
-	pWorld->Step(flTimeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+	m_pWorld->Step(flTimeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
 	PostSimulate();
 }

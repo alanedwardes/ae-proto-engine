@@ -20,16 +20,9 @@ ServerUpdateManager::ServerUpdateManager(int iListenPort)
 	m_lStartTime = std::clock();
 	m_iLastUpdateClientId = 0;
 
-	m_pSendingCommunicator = new UdpCommunicator();
-
-	m_pReceivingCommunicator = new UdpCommunicator();
+	m_pSendingCommunicator.reset(new UdpCommunicator());
+	m_pReceivingCommunicator.reset(new UdpCommunicator());
 	m_pReceivingCommunicator->Bind(iListenPort);
-}
-
-ServerUpdateManager::~ServerUpdateManager()
-{
-	delete m_pReceivingCommunicator;
-	delete m_pSendingCommunicator;
 }
 
 int ServerUpdateManager::GenerateUpdateClientId()

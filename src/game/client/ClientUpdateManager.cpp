@@ -14,15 +14,10 @@ ClientUpdateManager::ClientUpdateManager()
 	assert(m_pCommunicator == 0);
 
 	// Create a new communicator
-	m_pCommunicator = new UdpCommunicator();
+	m_pCommunicator.reset(new UdpCommunicator());
 
 	// Set to an invalid port
 	m_oLocalPort = -1;
-}
-
-ClientUpdateManager::~ClientUpdateManager()
-{
-	delete m_pCommunicator;
 }
 
 void ClientUpdateManager::SetConnection(std::string szAddress, int iPort)
