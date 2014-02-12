@@ -14,4 +14,5 @@ public:
 
 	int playerId;
 	short pressedKeys;
+	Point mousePos;
 };

@@ -209,7 +209,11 @@ void ServerUpdateManager::ProcessClientUpdate(CommunicatorUpdate_t update)
 	short iPressedKeys;
 	data >> iPressedKeys;
 
+	Point poMousePos;
+	data >> poMousePos;
+
 	pUpdateClient->entity->pressedKeys = iPressedKeys;
+	pUpdateClient->entity->mousePos = poMousePos;
 	pUpdateClient->lastClientUpdate = CLIENT_UPDATE_FULL;
 	pUpdateClient->lastReceivedUpdateTime = GetCurrentTime();
 }

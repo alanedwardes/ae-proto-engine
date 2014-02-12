@@ -22,6 +22,8 @@ WorldRenderer::WorldRenderer()
 
 	Point poSize = g_pSettings->GetPoint("client_size", Point(800, 600));
 
+	m_pWindowTarget = &m_oRenderWindow;
+
 	m_oRenderWindow.create(sf::VideoMode(int(poSize.x), int(poSize.y)), "Waiting...",
 		sf::Style::Default, oContextSettings);
 
@@ -29,6 +31,8 @@ WorldRenderer::WorldRenderer()
 
 	auto szDebugFont = g_pSettings->GetFile("debug_font");
 	m_oDebugFont.loadFromFile(szDebugFont);
+
+	ResetView();
 
 	GetWindowIcon();
 }
@@ -77,8 +81,6 @@ sf::Texture* WorldRenderer::GetTexture(RenderedPolygon *pPolygon)
 
 void WorldRenderer::RenderEntities()
 {
-	auto oView = m_oRenderWindow.getView();
-
 	auto oEntities = g_oWorldManager.GetGameObjects();
 	for (auto pEntity : oEntities)
 	{
@@ -92,11 +94,10 @@ void WorldRenderer::RenderEntities()
 			if (pPlayer && g_oClientUpdateManager.GetUpdateClientId() == pPlayer->playerId)
 			{
 				// Smooth the camera position
-				Point poViewCenter = (m_poOldViewCenter * 0.9f) + (pPlayer->position * 0.1f);
-				oView.setCenter(POINT_TO_SFML(poViewCenter));
-				oView.zoom(m_flZoomLevel);
-				oView.setRotation(pPlayer->rotation);
-				m_poOldViewCenter = poViewCenter;
+				Point poViewCenter = (POINT_FROM_SFML(m_oMainGameView.getCenter()) * 0.9f) + (pPlayer->position * 0.1f);
+				m_oMainGameView.setCenter(POINT_TO_SFML(poViewCenter));
+				m_oMainGameView.zoom(m_flZoomLevel);
+				m_oMainGameView.setRotation(pPlayer->rotation);
 			}
 
 			DrawRenderable(pEntity, pRenderable);
@@ -116,8 +117,6 @@ void WorldRenderer::RenderEntities()
 				DrawSimulated(pEntity, pSimulated);
 		}
 	}
-
-	m_oRenderWindow.setView(oView);
 }
 
 void WorldRenderer::DrawDebugText(BaseGameObject *pEntity)
@@ -136,14 +135,16 @@ void WorldRenderer::DrawRenderable(BaseGameObject *pEntity, IRendered *pRenderab
 	auto oRenderables = pRenderable->GetRenderables();
 	for (auto pPoly : oRenderables)
 	{
+		const float dumbSmoothFactor = 0.75f;
+
 		sf::ConvexShape oShape;
 		AddPointsToShape(&oShape, &pPoly->polygon.points);
 
-		Point poPosition = (pRenderable->lastPosition * 0.75f) + (pEntity->position * 0.25f);
+		Point poPosition = (pRenderable->lastPosition * dumbSmoothFactor) + (pEntity->position * (1.0f - dumbSmoothFactor));
 		oShape.setPosition(POINT_TO_SFML(poPosition));
 		pRenderable->lastPosition = poPosition;
 
-		float flRoation = (pRenderable->lastRotation * 0.75f) + (pEntity->rotation * 0.25f);
+		float flRoation = (pRenderable->lastRotation * dumbSmoothFactor) + (pEntity->rotation * (1.0f - dumbSmoothFactor));
 		oShape.setRotation(flRoation);
 		pRenderable->lastRotation = flRoation;
 
@@ -195,6 +196,8 @@ void WorldRenderer::Render()
 {
 	m_oRenderWindow.clear(sf::Color::White);
 
+	m_oRenderWindow.setView(m_oMainGameView);
+
 	RenderEntities();
 
 	if (g_oWorldManager.IsLevelLoaded())
@@ -212,6 +215,10 @@ void WorldRenderer::ProcessEvents()
 	sf::Event event;
     while (m_oRenderWindow.pollEvent(event))
     {
+		sf::Vector2i mousePos(event.mouseMove.x, event.mouseMove.y);
+		auto pos = m_pWindowTarget->mapPixelToCoords(mousePos, m_oMainGameView);
+		g_pInputManager->NewMousePosition(POINT_FROM_SFML(pos));
+
         if (event.type == sf::Event::Closed)
 			g_bClientRunning = false;
 
@@ -231,6 +238,18 @@ void WorldRenderer::ProcessEvents()
 			}
 		}
 
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			g_pInputManager->KeyPress(
+				g_pInputManager->TranslateKeyCode(event.mouseButton.button));
+		}
+
+		if (event.type == sf::Event::MouseButtonReleased)
+		{
+			g_pInputManager->KeyRelease(
+				g_pInputManager->TranslateKeyCode(event.mouseButton.button));
+		}
+
 		if (event.type == sf::Event::MouseWheelMoved)
 		{
 			m_flZoomLevel -= event.mouseWheel.delta / 10.0f;
@@ -246,10 +265,10 @@ void WorldRenderer::ProcessEvents()
 
 void WorldRenderer::ResetView()
 {
-	auto oView = m_oRenderWindow.getView();
 	auto oWindowSize = m_oRenderWindow.getSize();
 	g_pSettings->SetPoint("client_size", POINT_FROM_SFML(oWindowSize));
 	g_pSettings->WriteManifest();
-	oView.setSize(float(oWindowSize.x), float(oWindowSize.y));
-	m_oRenderWindow.setView(oView);
+
+	m_oMainGameView.setSize(float(oWindowSize.x), float(oWindowSize.y));
+	m_oUiView.setSize(float(oWindowSize.x), float(oWindowSize.y));
 }

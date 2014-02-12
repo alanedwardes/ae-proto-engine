@@ -151,6 +151,8 @@ void WorldSimulator::PreSimulate()
 
  		pDef->simulated->PreSimulate();
 		pDef->physBody->SetLinearVelocity(POINT_TO_BOX2D(pDef->simBody->linearVelocity));
+		pDef->physBody->SetTransform(POINT_TO_BOX2D(pDef->base->position),
+			DEGREES_TO_RADIANS(pDef->base->rotation));
 	}
 }
 

@@ -25,9 +25,11 @@ private:
 	virtual void AddPointsToShape(sf::ConvexShape *oShape, std::vector<Point> *pPoints);
 	virtual sf::Texture* GetTexture(RenderedPolygon *pPolygon);
 	sf::RenderWindow m_oRenderWindow;
+	sf::RenderTarget* m_pWindowTarget;
 	sf::Image m_oWindowIcon;
 	sf::Font m_oDebugFont;
 	float m_flZoomLevel;
-	Point m_poOldViewCenter;
+	sf::View m_oMainGameView;
+	sf::View m_oUiView;
 	std::vector<sf::Texture*> m_oLoadedTextures;
 };

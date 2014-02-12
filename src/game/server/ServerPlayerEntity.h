@@ -24,7 +24,7 @@ public:
 	{
 		const float amount = 50;
 		const float max = 100.0f;
-		int x = 0, y = 0;
+		float x = 0, y = 0;
 		if ((pressedKeys & KEY_UP) && (g_pGameState->time > lastJumpTime + 1000.0f))
 		{
 			lastJumpTime = g_pGameState->time;
@@ -45,16 +45,14 @@ public:
 				pSimulatedBody->linearVelocity.y = pSimulatedBody->linearVelocity.y + y;
 			}
 		}
-
-		pressedKeys = KEY_NONE;
 	};
 
-	virtual void Contact(ISimulated *pSimulated)
-	{
-		auto pGameObject = dynamic_cast<BaseGameObject*>(pSimulated);
+	//virtual void Contact(ISimulated *pSimulated)
+	//{
+	//	//auto pGameObject = dynamic_cast<BaseGameObject*>(pSimulated);
 
-		Debug::Message(pGameObject->DebugText());
-	};
+	//	//Debug::Message(pGameObject->DebugText());
+	//};
 
 	virtual std::string Serialise()
 	{

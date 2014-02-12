@@ -51,7 +51,9 @@ void ClientUpdateManager::SendUpdates()
 	else
 	{
 		CommunicatorUpdate_t update;
-		update.data << CLIENT_UPDATE_FULL << g_pInputManager->SampleInput();
+		update.data << CLIENT_UPDATE_FULL;
+		update.data << g_pInputManager->SampleInput();
+		update.data << g_pInputManager->SampleMousePosition();
 		update.host = m_oRemoteHost;
 		m_oLastSentUpdate = update;
 		m_pCommunicator->SendPacket(update);
