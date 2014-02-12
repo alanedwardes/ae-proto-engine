@@ -12,4 +12,7 @@ Little prototype networked game engine written in C++:
 
 Requirements
 ---------------
-* Visual Studio 2013 (solutions included, more platforms in the future)
+* CMake
+* Visual Studio 2013 (for Windows)
+
+Compilation on other platforms will require link libraries to be recompiled - currently only Windows libraries are included.
