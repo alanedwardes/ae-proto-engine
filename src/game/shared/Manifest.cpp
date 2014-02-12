@@ -143,17 +143,21 @@ void Manifest::SetVector(std::string szKey, Vector veValue)
 	m_oManifest[szKey] = oValue;
 }
 
-std::vector<Point> Manifest::GetPointList(std::string szKey)
+Polygon Manifest::GetPolygon(std::string szKey)
 {
-	std::vector<Point> oPoints;
+	Polygon oPolygon;
 	auto oJsonValue = m_oManifest[szKey];
 	for (Json::Value::UInt i = 0; i < oJsonValue.size(); i++)
 	{
 		auto oPoint = oJsonValue[i];
-		oPoints.push_back(Point(FLOAT_AT_INDEX(oPoint, 0), FLOAT_AT_INDEX(oPoint, 1)));
+		oPolygon.points.push_back(Point(FLOAT_AT_INDEX(oPoint, 0), FLOAT_AT_INDEX(oPoint, 1)));
 	}
+	return oPolygon;
+}
 
-	return oPoints;
+void Manifest::SetPolygon(std::string szKey, Polygon oPolygon)
+{
+	assert(0); // TODO
 }
 
 Point Manifest::GetPoint(std::string szKey, Point poDefault)

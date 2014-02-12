@@ -4,6 +4,7 @@
 #include "shared\WorldManager.h"
 #include "shared\Manifest.h"
 #include "shared\GameObjectFactoryHolder.h"
+#include "shared\GameState.h"
 #include "InputManager.h"
 
 // Global resources
@@ -12,6 +13,7 @@ Manifest *g_pSettings;
 WorldManager g_oWorldManager;
 ClientUpdateManager g_oClientUpdateManager;
 InputManager *g_pInputManager;
+GameState *g_pGameState;
 
 #include "ClientFactoryManifest.h"
 
@@ -19,6 +21,7 @@ void Client::Run()
 {
 	g_pSettings = new Manifest();
 	g_pInputManager = new InputManager();
+	g_pGameState = new GameState();
 
 	// Try to read the manifest
 	if (!g_pSettings->ReadManifest("client_manifest.json"))
@@ -35,14 +38,15 @@ void Client::Run()
 	// Log the start time
 	long startTime = std::clock();
 
-	// Send updates 20 times per second
+	// Send updates 30 times per second
 	long lastUpdateTime = 0;
-	float updateFrequency = 1000 / 20;
+	float updateFrequency = 1000 / 30;
 
 	// Loop while the client is running
 	while (g_bClientRunning)
 	{
 		long curTime = (std::clock() - startTime);
+		g_pGameState->time = curTime;
 
 		// Receive updates
 		g_oClientUpdateManager.ReceiveUpdates();
@@ -63,4 +67,5 @@ void Client::Run()
 
 	delete g_pSettings;
 	delete g_pInputManager;
+	delete g_pGameState;
 }

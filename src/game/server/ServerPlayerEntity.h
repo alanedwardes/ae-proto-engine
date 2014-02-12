@@ -22,11 +22,14 @@ public:
 
 	virtual void PreSimulate()
 	{
-		const int amount = 10;
-		const int max = 100;
+		const float amount = 50;
+		const float max = 100.0f;
 		int x = 0, y = 0;
-		if (pressedKeys & KEY_UP)
-			y = -amount;
+		if ((pressedKeys & KEY_UP) && (g_pGameState->time > lastJumpTime + 1000.0f))
+		{
+			lastJumpTime = g_pGameState->time;
+			y = -(amount * 4);
+		}
 		if (pressedKeys & KEY_RIGHT)
 			x = amount;
 		if (pressedKeys & KEY_DOWN)
@@ -38,10 +41,19 @@ public:
 		{
 			for (auto pSimulatedBody : GetSimulationData())
 			{
- 				pSimulatedBody->linearVelocity.x += std::min(x, max);
-          		pSimulatedBody->linearVelocity.y += std::min(y, max);
+				pSimulatedBody->linearVelocity.x = std::max(-max, std::min(pSimulatedBody->linearVelocity.x + x, max));
+				pSimulatedBody->linearVelocity.y = pSimulatedBody->linearVelocity.y + y;
 			}
 		}
+
+		pressedKeys = KEY_NONE;
+	};
+
+	virtual void Contact(ISimulated *pSimulated)
+	{
+		auto pGameObject = dynamic_cast<BaseGameObject*>(pSimulated);
+
+		Debug::Message(pGameObject->DebugText());
 	};
 
 	virtual std::string Serialise()
@@ -51,5 +63,5 @@ public:
 		return oSerialiser.Serialise();
 	};
 
-	int bodyId;
+	long lastJumpTime;
 };

@@ -11,14 +11,11 @@ struct SimulatedBody
 		auto oSize = oSimulationManifest.GetPoint("size");
 		if (!oSize)
 		{
-			points = oSimulationManifest.GetPointList("points");
+			polygon = oSimulationManifest.GetPolygon("points");
 		}
 		else
 		{
-			points.push_back(Point(0, 0));
-			points.push_back(Point(0, oSize.y));
-			points.push_back(Point(oSize.x, oSize.y));
-			points.push_back(Point(oSize.x, 0));
+			polygon = Polygon(oSize);
 		}
 
 		friction = oSimulationManifest.GetFloat("friction");
@@ -32,7 +29,7 @@ struct SimulatedBody
 	float restitution;
 	float friction;
 	Point linearVelocity;
-	std::vector<Point> points;
+	Polygon polygon;
 };
 
 class ISimulated
@@ -41,5 +38,5 @@ public:
 	virtual std::vector<SimulatedBody*> GetSimulationData() = 0;
 	virtual void PreSimulate() = 0;
 	virtual void PostSimulate() = 0;
-	int bodyId;
+	virtual void Contact(ISimulated *pSimulated) = 0;
 };

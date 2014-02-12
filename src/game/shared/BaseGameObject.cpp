@@ -1,6 +1,10 @@
 #include "BaseGameObject.h"
 #include <sstream>
 
+#include "shared\GameState.h"
+
+extern GameState g_pGameState;
+
 std::string BaseGameObject::DebugText()
 {
 	std::ostringstream sstream;

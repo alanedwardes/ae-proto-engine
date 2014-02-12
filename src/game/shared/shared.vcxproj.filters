@@ -131,5 +131,14 @@
     <ClInclude Include="..\..\public\headers\shared\GameObjectFactoryHolder.h">
       <Filter>Source Files\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\Polygon.h">
+      <Filter>Source Files\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\IProcessed.h">
+      <Filter>Source Files\Game Objects\Behaviours</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\public\headers\shared\GameState.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

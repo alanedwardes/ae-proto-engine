@@ -105,12 +105,15 @@
     <ClInclude Include="..\..\public\headers\shared\GameObjectFactory.h" />
     <ClInclude Include="..\..\public\headers\shared\GameObjectFactoryHolder.h" />
     <ClInclude Include="..\..\public\headers\shared\INetworked.h" />
+    <ClInclude Include="..\..\public\headers\shared\IProcessed.h" />
     <ClInclude Include="..\..\public\headers\shared\IRendered.h" />
     <ClInclude Include="..\..\public\headers\shared\ISimulated.h" />
     <ClInclude Include="..\..\public\headers\shared\Key.h" />
     <ClInclude Include="..\..\public\headers\shared\Manifest.h" />
     <ClInclude Include="..\..\public\headers\shared\BaseSimulatedEntity.h" />
     <ClInclude Include="..\..\public\headers\shared\Point.h" />
+    <ClInclude Include="..\..\public\headers\shared\Polygon.h" />
+    <ClInclude Include="..\..\public\headers\shared\GameState.h" />
     <ClInclude Include="..\..\public\headers\shared\StreamSerialiser.h" />
     <ClInclude Include="..\..\public\headers\shared\UpdateManager.h" />
     <ClInclude Include="..\..\public\headers\shared\TcpCommunicator.h" />

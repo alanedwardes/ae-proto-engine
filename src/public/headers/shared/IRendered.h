@@ -13,14 +13,11 @@ struct RenderedPolygon
 		auto oSize = oRenderingManifest.GetPoint("size");
 		if (!oSize)
 		{
-			points = oRenderingManifest.GetPointList("points");
+			polygon = oRenderingManifest.GetPolygon("points");
 		}
 		else
 		{
-			points.push_back(Point(0, 0));
-			points.push_back(Point(0, oSize.y));
-			points.push_back(Point(oSize.x, oSize.y));
-			points.push_back(Point(oSize.x, 0));
+			polygon = Polygon(oSize);
 		}
 
 		texturePath = oRenderingManifest.GetFile("texture");
@@ -28,9 +25,9 @@ struct RenderedPolygon
 	};
 
 	bool fill;
-	std::vector<Point> points;
 	std::string texturePath;
 	int polygonReference;
+	Polygon polygon;
 };
 
 class IRendered

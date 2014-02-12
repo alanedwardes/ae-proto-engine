@@ -27,6 +27,10 @@ public:
 	{
 	};
 
+	virtual void Contact(ISimulated *pSimulated)
+	{
+	};
+
 	virtual std::vector<SimulatedBody*> GetSimulationData()
 	{
 		return m_oSimulationData;

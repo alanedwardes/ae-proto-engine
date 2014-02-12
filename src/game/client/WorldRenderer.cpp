@@ -137,7 +137,7 @@ void WorldRenderer::DrawRenderable(BaseGameObject *pEntity, IRendered *pRenderab
 	for (auto pPoly : oRenderables)
 	{
 		sf::ConvexShape oShape;
-		AddPointsToShape(&oShape, &pPoly->points);
+		AddPointsToShape(&oShape, &pPoly->polygon.points);
 
 		Point poPosition = (pRenderable->lastPosition * 0.75f) + (pEntity->position * 0.25f);
 		oShape.setPosition(POINT_TO_SFML(poPosition));
@@ -167,7 +167,7 @@ void WorldRenderer::DrawSimulated(BaseGameObject* pEntity, ISimulated* pSimulate
 	for (auto pSimulated : oSimulations)
 	{
 		sf::ConvexShape oShape;
-		AddPointsToShape(&oShape, &pSimulated->points);
+		AddPointsToShape(&oShape, &pSimulated->polygon.points);
 
 		oShape.setPosition(POINT_TO_SFML(pEntity->position));
 		oShape.setRotation(pEntity->rotation);

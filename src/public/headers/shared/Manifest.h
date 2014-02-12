@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "Polygon.h"
 #include "Vector.h"
 #include "Point.h"
 #include "jsoncpp\json.h"
@@ -33,11 +34,13 @@ public:
 	virtual void SetVector(std::string szKey, Vector veValue);
 
 	virtual Point GetPoint(std::string szKey, Point poDefault = Point());
-	virtual std::vector<Point> GetPointList(std::string szKey);
 	virtual void SetPoint(std::string szKey, Point poValue);
 
 	virtual Manifest GetManifest(std::string szKey);
 	virtual void SetManifest(std::string szKey, Manifest oManifest);
+
+	virtual Polygon Manifest::GetPolygon(std::string szKey);
+	virtual void SetPolygon(std::string szKey, Polygon oPolygon);
 
 	virtual Manifest GetIncludedManifest(std::string szKey, std::string szPath = std::string());
 

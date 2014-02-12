@@ -7,6 +7,7 @@
 #include "WorldSimulator.h"
 #include "shared\WorldManager.h"
 #include "shared\Manifest.h"
+#include "shared\GameState.h"
 #include "shared\GameObjectFactoryHolder.h"
 
 // Global resources
@@ -14,12 +15,14 @@ bool g_bServerRunning = true;
 Manifest *g_pSettings;
 WorldManager g_oWorldManager;
 WorldSimulator g_oWorldSimulator;
+GameState *g_pGameState;
 
 #include "ServerFactoryManifest.h"
 
 void Server::Run()
 {
 	g_pSettings = new Manifest();
+	g_pGameState = new GameState();
 
 	// Try to read the manifest
 	if (!g_pSettings->ReadManifest("server_manifest.json"))
@@ -32,9 +35,9 @@ void Server::Run()
 	long lastSimulateTime = 0;
 	float simulationFrequency = 1000.0f / 60.0f;
 
-	// Send updates 2 times per second
+	// Send updates 30 times per second
 	long lastUpdateTime = 0;
-	float updateFrequency = 1000.0f / 25.0f;
+	float updateFrequency = 1000.0f / 30.0f;
 
 	//// Start the server
 	// Create a network update manager and listen
@@ -50,6 +53,7 @@ void Server::Run()
 	while (g_bServerRunning)
 	{
 		long curTime = (std::clock() - startTime);
+		g_pGameState->time = curTime;
 
 		// Receive updates
 		oUpdateManager.ReceiveUpdates();
@@ -69,4 +73,5 @@ void Server::Run()
 	}
 
 	delete g_pSettings;
+	delete g_pGameState;
 }

@@ -32,7 +32,12 @@ WorldSimulator::WorldSimulator()
 	m_pWorld.reset(new b2World(gravity));
 }
 
-unsigned int WorldSimulator::CreateDynamicBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody)
+void WorldSimulator::AddBodyToSimulatedObjects(SimulationDefinition *pSimulationDefinition)
+{
+	m_oSimulationDefinitions.push_back(pSimulationDefinition);
+}
+
+void WorldSimulator::CreateDynamicBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody)
 {
 	assert(pEntity);
 	auto pSimulated = dynamic_cast<ISimulated*>(pEntity);
@@ -60,12 +65,17 @@ unsigned int WorldSimulator::CreateDynamicBody(BaseGameObject *pEntity, Simulate
 	pSimulationDefinition->physBody = pBody;
 	pSimulationDefinition->simBody = pSimulatedBody;
 	pSimulationDefinition->simulated = pSimulated;
+	pBody->SetUserData(pSimulationDefinition);
 
-	return AddBodyToDynamicSimulatedObjects(pSimulationDefinition);
+	AddBodyToSimulatedObjects(pSimulationDefinition);
 }
 
 void WorldSimulator::CreateStaticBody(BaseGameObject *pEntity, SimulatedBody *pSimulatedBody)
 {
+	assert(pEntity);
+	auto pSimulated = dynamic_cast<ISimulated*>(pEntity);
+	assert(pSimulated);
+
 	b2BodyDef oStaticBodyDef;
 	oStaticBodyDef.type = b2_staticBody;
 	oStaticBodyDef.allowSleep = true;
@@ -80,11 +90,20 @@ void WorldSimulator::CreateStaticBody(BaseGameObject *pEntity, SimulatedBody *pS
 	oFixtureDef.shape = &oPolygon;
 
 	pStaticBody->CreateFixture(&oFixtureDef);
+
+	auto pSimulationDefinition = new SimulationDefinition();
+	pSimulationDefinition->base = pEntity;
+	pSimulationDefinition->physBody = pStaticBody;
+	pSimulationDefinition->simBody = pSimulatedBody;
+	pSimulationDefinition->simulated = pSimulated;
+	pStaticBody->SetUserData(pSimulationDefinition);
+
+	AddBodyToSimulatedObjects(pSimulationDefinition);
 }
 
 b2PolygonShape WorldSimulator::CreatePolygon(SimulatedBody *pSimulatedBody)
 {
-	auto oPoints = pSimulatedBody->points;
+	auto oPoints = pSimulatedBody->polygon.points;
 	int iPointsNum = oPoints.size();
 	b2Vec2 *pPoints = new b2Vec2[iPointsNum];
 
@@ -141,7 +160,26 @@ void WorldSimulator::Simulate(float flTimeStep)
 
 	m_pWorld->Step(flTimeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
+	FindContacts();
+
 	PostSimulate();
+}
+
+void WorldSimulator::FindContacts()
+{
+	for (auto pContact = m_pWorld->GetContactList(); pContact; pContact = pContact->GetNext())
+	{
+		if (pContact->IsTouching())
+		{
+			auto pBodyA = pContact->GetFixtureA()->GetBody();
+			auto pBodyB = pContact->GetFixtureB()->GetBody();
+
+			auto pSimulationDefA = reinterpret_cast<SimulationDefinition*>(pBodyA->GetUserData());
+			auto pSimulationDefB = reinterpret_cast<SimulationDefinition*>(pBodyB->GetUserData());
+			pSimulationDefA->simulated->Contact(pSimulationDefB->simulated);
+			pSimulationDefB->simulated->Contact(pSimulationDefA->simulated);
+		}
+	}
 }
 
 void WorldSimulator::PostSimulate()
