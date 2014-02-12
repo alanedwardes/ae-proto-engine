@@ -7,10 +7,6 @@ SET(${SERVER_TARGET}_SOURCE_FILES
 	${WD}Server.cpp
 	${WD}ServerUpdateManager.cpp
 	${WD}WorldSimulator.cpp
-)
-
-SET(${SERVER_TARGET}_HEADER_FILES
-    ServerStaticGeometry.h
 	${WD}ServerFactoryManifest.h
 	${WD}Server.h
 	${WD}ServerPhysicsEntity.h
@@ -18,6 +14,32 @@ SET(${SERVER_TARGET}_HEADER_FILES
 	${WD}ServerStaticEntity.h
 	${WD}ServerUpdateManager.h
 	${WD}WorldSimulator.h
+)
+
+SOURCE_GROUP("" FILES 
+	${WD}Server.h
+	${WD}Server.cpp
+)
+
+SOURCE_GROUP("Systems" FILES 
+	${WD}ServerUpdateManager.h
+	${WD}ServerUpdateManager.cpp
+	${WD}WorldSimulator.h
+	${WD}WorldSimulator.cpp
+)
+
+SOURCE_GROUP("Game Objects" FILES 
+	${WD}ServerFactoryManifest.h
+)
+
+SOURCE_GROUP("Game Objects\\Entities" FILES 
+	${WD}ServerPhysicsEntity.h
+	${WD}ServerPlayerEntity.h
+	${WD}ServerStaticEntity.h
+)
+
+SOURCE_GROUP("Game Objects\\Geometry" FILES 
+	${WD}ServerStaticGeometry.h
 )
 
 ADD_LIBRARY(${SERVER_TARGET} SHARED ${${SERVER_TARGET}_SOURCE_FILES})

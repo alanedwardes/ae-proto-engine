@@ -7,9 +7,6 @@ SET(${CLIENT_TARGET}_SOURCE_FILES
 	${WD}Client.cpp
 	${WD}ClientUpdateManager.cpp
 	${WD}WorldRenderer.cpp
-)
-
-SET(${CLIENT_TARGET}_HEADER_FILES
 	${WD}Client.h
 	${WD}ClientPhysicsEntity.h
 	${WD}ClientPlayerEntity.h
@@ -17,6 +14,32 @@ SET(${CLIENT_TARGET}_HEADER_FILES
 	${WD}ClientFactoryManifest.h
 	${WD}InputManager.h
 	${WD}WorldRenderer.h
+)
+
+SOURCE_GROUP("" FILES 
+	${WD}Client.h
+	${WD}Client.cpp
+)
+
+SOURCE_GROUP("Systems" FILES
+	${WD}ClientUpdateManager.h
+	${WD}ClientUpdateManager.cpp
+	${WD}InputManager.h
+	${WD}WorldRenderer.h
+	${WD}WorldRenderer.cpp
+)
+
+SOURCE_GROUP("Game Objects" FILES 
+	${WD}ClientFactoryManifest.h
+)
+
+SOURCE_GROUP("Game Objects\\Entities" FILES 
+	${WD}ClientPhysicsEntity.h
+	${WD}ClientPlayerEntity.h
+)
+
+SOURCE_GROUP("Game Objects\\Geometry" FILES 
+
 )
 
 ADD_LIBRARY(${CLIENT_TARGET} SHARED ${${CLIENT_TARGET}_SOURCE_FILES})

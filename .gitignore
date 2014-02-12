@@ -22,10 +22,16 @@
 *.vcxproj
 *.vcxproj.filters
 *.sln
+*.ilk
+*.pdb
+*.tlog
+*.obj
+*.log
 
 # CMake
 CMakeFiles
 CMakeCache.txt
+cmake_install.cmake
 
 /src/game/client/Debug
 /src/game/client/Release

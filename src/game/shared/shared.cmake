@@ -16,9 +16,6 @@ SET(${SHARED_TARGET}_SOURCE_FILES
 	${WD}TcpCommunicator.cpp
 	${WD}UdpCommunicator.cpp
 	${WD}WorldManager.cpp
-)
-
-SET(${SHARED_TARGET}_HEADER_FILES
 	${WD}../../public/headers/shared/BaseGameObject.h
 	${WD}../../public/headers/shared/BasePlayerEntity.h
 	${WD}../../public/headers/shared/BaseRenderedGeometry.h
@@ -29,7 +26,6 @@ SET(${SHARED_TARGET}_HEADER_FILES
 	${WD}../../public/headers/shared/GameObjectFactory.h
 	${WD}../../public/headers/shared/GameObjectFactoryHolder.h
 	${WD}../../public/headers/shared/INetworked.h
-	${WD}../../public/headers/shared/IProcessed.h
 	${WD}../../public/headers/shared/IRendered.h
 	${WD}../../public/headers/shared/ISimulated.h
 	${WD}../../public/headers/shared/Key.h
