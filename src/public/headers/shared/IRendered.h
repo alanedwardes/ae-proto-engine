@@ -6,8 +6,6 @@
 
 struct RenderedPolygon
 {
-	RenderedPolygon() : polygonReference(-1) {};
-
 	virtual void LoadManifest(Manifest oRenderingManifest)
 	{
 		auto oSize = oRenderingManifest.GetPoint("size");
@@ -24,9 +22,9 @@ struct RenderedPolygon
 		fill = oRenderingManifest.GetBool("fill");
 	};
 
-	bool fill;
+	bool fill = false;
 	std::string texturePath;
-	int polygonReference;
+	int polygonReference = -1;
 	Polygon polygon;
 };
 
@@ -37,5 +35,5 @@ public:
 	// Position used for client-side interpolation
 	Point lastPosition;
 	// Rotation used for client-side interpolation
-	float lastRotation;
+	float lastRotation = 0.0f;
 };

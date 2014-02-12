@@ -12,13 +12,13 @@ public:
 
 	virtual std::string DebugText();
 
-	signed int id;
+	signed int id = 0;
 	std::string name;
 	Point position;
-	float rotation;
+	float rotation = 0.0f;
 
-	int typeId;
+	int typeId = 0;
 	std::string typeName;
 
-	bool deleted;
+	bool deleted = false;
 };
