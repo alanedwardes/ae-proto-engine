@@ -19,6 +19,13 @@
 *.aps
 *.vsp
 *.psess
+*.vcxproj
+*.vcxproj.filters
+*.sln
+
+# CMake
+CMakeFiles
+CMakeCache.txt
 
 /src/game/client/Debug
 /src/game/client/Release
