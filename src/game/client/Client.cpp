@@ -7,7 +7,8 @@
 #include "ClientFactoryManifest.h"
 #include "GameState.h"
 #include "Locator.h"
-#include "Drawing.h"
+#include "SFMLDrawing.h"
+#include "WindowManager.h"
 
 void Client::Run()
 {
@@ -23,7 +24,7 @@ void Client::Run()
 	auto pFactoryManifest = new ClientFactoryManifest();
 	Locator::Provide(pFactoryManifest);
 
-	auto pDrawing = new Drawing();
+	auto pDrawing = new SFMLDrawing();
 	Locator::Provide(pDrawing);
 
 	// Try to read the manifest
@@ -36,8 +37,10 @@ void Client::Run()
 	auto pClientUpdateManager = new ClientUpdateManager();
 	pClientUpdateManager->SetConnection(szHost, iPort);
 
-	// Create a world renderer
-	WorldRenderer oWorldRenderer;
+	// Create a window manager
+	auto pWindowManager = new WindowManager();
+
+	auto pWorldRenderer = new WorldRenderer();
 
 	// Log the start time
 	long startTime = std::clock();
@@ -56,10 +59,10 @@ void Client::Run()
 		pClientUpdateManager->ReceiveUpdates();
 
 		// Process window input events
-		oWorldRenderer.ProcessEvents();
+		pWindowManager->ProcessEvents();
 
 		// Render the world
-		oWorldRenderer.Render();
+		pWindowManager->Render();
 
 		// Send out updates
 		if (curTime >= lastUpdateTime + updateFrequency)

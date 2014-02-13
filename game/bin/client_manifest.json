@@ -4,7 +4,7 @@
    "client_size" : [ 802.0, 587.0 ],
    "connect_host" : "127.0.0.1",
    "connect_port" : 1236,
-   "debug" : true,
+   "debug" : false,
    "debug_font" : "inconsolata.otf",
    "fps_limit" : 60,
    "level_directory" : "../levels",

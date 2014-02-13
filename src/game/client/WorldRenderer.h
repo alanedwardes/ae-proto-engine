@@ -2,23 +2,21 @@
 
 #include "sfml\Graphics.hpp"
 #include "Point.h"
+#include "View.h"
+#include "Locator.h"
 
 class IRendered;
 class ISimulated;
 struct RenderedPolygon;
 class BaseGameObject;
 
-class WorldRenderer
+class WorldRenderer : public View, public IRenderCallback
 {
 public:
 	WorldRenderer();
-	~WorldRenderer();
 	virtual void Render();
-	virtual void ProcessEvents();
+	virtual Camera GetCamera() { return m_oCamera; }
 private:
-	virtual void ResetView();
-	virtual void GetWindowIcon();
-	virtual void RenderEntities();
 	virtual void DrawRenderable(BaseGameObject *pEntity, IRendered* pRenderable);
 	virtual void DrawSimulated(BaseGameObject *pEntity, ISimulated* pSimulated);
 	virtual void DrawDebugText(BaseGameObject *pEntity);
@@ -27,9 +25,8 @@ private:
 	sf::RenderWindow m_oRenderWindow;
 	sf::RenderTarget* m_pWindowTarget;
 	sf::Image m_oWindowIcon;
-	sf::Font m_oDebugFont;
+	int m_iDebugFont;
 	float m_flZoomLevel;
-	sf::View m_oMainGameView;
-	sf::View m_oUiView;
+	Camera m_oCamera;
 	std::vector<sf::Texture*> m_oLoadedTextures;
 };

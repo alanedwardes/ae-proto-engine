@@ -3,9 +3,9 @@
 #include "IWorldManager.h"
 #include "IWorldSimulator.h"
 #include "IInputManager.h"
+#include "IDrawing.h"
 #include "IGameState.h"
 #include "IFactoryManifest.h"
-#include "IDrawing.h"
 
 class Locator
 {

@@ -10,10 +10,9 @@ class WindowManager
 public:
 	WindowManager();
 	virtual void Render();
-	virtual void AddView(View *view);
+	virtual void ProcessEvents();
 private:
 	sf::RenderWindow m_oRenderWindow;
 	sf::Image m_oWindowIcon;
 	sf::Font m_oDebugFont;
-	std::vector<View*> m_oViews;
 };

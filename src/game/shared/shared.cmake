@@ -46,6 +46,7 @@ SET(SHARED_SOURCE_FILES
 	${SHAREDWD}IGameState.h
 	${SHAREDWD}IFactoryManifest.h
 	${SHAREDWD}IDrawing.h
+	${SHAREDWD}Color.h
 )
 
 SOURCE_GROUP("Shared" FILES
@@ -57,6 +58,7 @@ SOURCE_GROUP("Shared\\Data" FILES
 	${SHAREDWD}Vector.h
 	${SHAREDWD}Key.h
 	${SHAREDWD}Polygon.h
+	${SHAREDWD}Color.h
 )
 
 SOURCE_GROUP("Shared\\Game Objects\\BaseGeometry" FILES 

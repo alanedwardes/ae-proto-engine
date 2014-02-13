@@ -7,53 +7,13 @@
 #include "IWorldManager.h"
 #include "Locator.h"
 #include "GameState.h"
-
-#define POINT_TO_SFML(POINT) sf::Vector2f(POINT.x, POINT.y)
-#define POINT_FROM_SFML(POINT) Point(POINT.x, POINT.y)
+#include "SFMLDrawing.h"
 
 WorldRenderer::WorldRenderer()
 {
-	sf::ContextSettings oContextSettings = m_oRenderWindow.getSettings();
-	oContextSettings.antialiasingLevel = Locator::GameState()->Settings()->GetInt("client_antialias");
-
-	Point poSize = Locator::GameState()->Settings()->GetPoint("client_size", Point(800, 600));
-
-	m_pWindowTarget = &m_oRenderWindow;
-
-	m_oRenderWindow.create(sf::VideoMode(int(poSize.x), int(poSize.y)), "Waiting...",
-		sf::Style::Default, oContextSettings);
-
-	m_oRenderWindow.setFramerateLimit(Locator::GameState()->Settings()->GetInt("fps_limit", 60));
-
 	auto szDebugFont = Locator::GameState()->Settings()->GetFile("debug_font");
-	m_oDebugFont.loadFromFile(szDebugFont);
-
-	ResetView();
-
-	GetWindowIcon();
-}
-
-WorldRenderer::~WorldRenderer()
-{
-	m_oRenderWindow.close();
-}
-
-void WorldRenderer::GetWindowIcon()
-{
-	auto szIconPath = Locator::GameState()->Settings()->GetFile("client_icon");
-	
-	if (szIconPath.length() == 0)
-		return;
-
-	if (!m_oWindowIcon.loadFromFile(szIconPath))
-		return;
-	
-	sf::Vector2u oSize = m_oWindowIcon.getSize();
-
-	if (oSize.x <= 0 || oSize.y <= 0)
-		return;
-
-	m_oRenderWindow.setIcon(oSize.x, oSize.y, m_oWindowIcon.getPixelsPtr());
+	m_iDebugFont = Locator::Drawing()->LoadFontResource(szDebugFont);
+	Locator::Drawing()->AddRenderCallbackObject(this);
 }
 
 sf::Texture* WorldRenderer::GetTexture(RenderedPolygon *pPolygon)
@@ -75,55 +35,10 @@ sf::Texture* WorldRenderer::GetTexture(RenderedPolygon *pPolygon)
 	}
 }
 
-void WorldRenderer::RenderEntities()
-{
-	auto oEntities = Locator::WorldManager()->GetGameObjects();
-	for (auto pEntity : oEntities)
-	{
-		if (pEntity->deleted)
-			continue;
-
-		auto pRenderable = dynamic_cast<IRendered*>(pEntity);
-		if (pRenderable)
-		{
-			auto pPlayer = (ClientPlayerEntity*)pEntity;
-			if (pPlayer && Locator::GameState()->UpdateClientId() == pPlayer->playerId)
-			{
-				// Smooth the camera position
-				Point poViewCenter = (POINT_FROM_SFML(m_oMainGameView.getCenter()) * 0.9f) + (pPlayer->position * 0.1f);
-				m_oMainGameView.setCenter(POINT_TO_SFML(poViewCenter));
-				m_oMainGameView.zoom(m_flZoomLevel);
-				m_oMainGameView.setRotation(pPlayer->rotation);
-			}
-
-			DrawRenderable(pEntity, pRenderable);
-		}
-	}
-
-	if (Locator::GameState()->Settings()->GetBool("debug"))
-	{
-		for (auto pEntity : oEntities)
-		{
-			if (pEntity->deleted)
-				continue;
-
-			DrawDebugText(pEntity);
-			auto pSimulated = dynamic_cast<ISimulated*>(pEntity);
-			if (pSimulated)
-				DrawSimulated(pEntity, pSimulated);
-		}
-	}
-}
-
 void WorldRenderer::DrawDebugText(BaseGameObject *pEntity)
 {
-	sf::Text oText;
-	oText.setPosition(POINT_TO_SFML(pEntity->position));
-	oText.setString(pEntity->DebugText());
-	oText.setCharacterSize(11);
-	oText.setColor(sf::Color::Black);
-	oText.setFont(m_oDebugFont);
-	m_oRenderWindow.draw(oText);
+	Locator::Drawing()->SetColor(Color(0, 0, 0));
+	Locator::Drawing()->DrawText(pEntity->DebugText(), m_iDebugFont, 11, pEntity->position);
 }
 
 void WorldRenderer::DrawRenderable(BaseGameObject *pEntity, IRendered *pRenderable)
@@ -154,7 +69,7 @@ void WorldRenderer::DrawRenderable(BaseGameObject *pEntity, IRendered *pRenderab
 				int(poSize.width), int(poSize.height)));
 		}
 
-		m_oRenderWindow.draw(oShape);
+		((SFMLDrawing*)Locator::Drawing())->DrawShape(&oShape);
 	}
 }
 
@@ -173,7 +88,7 @@ void WorldRenderer::DrawSimulated(BaseGameObject* pEntity, ISimulated* pSimulate
 		oShape.setOutlineColor(sf::Color(255, 0, 0, 192));
 		oShape.setOutlineThickness(1.0f);
 
-		m_oRenderWindow.draw(oShape);
+		((SFMLDrawing*)Locator::Drawing())->DrawShape(&oShape);
 	}
 }
 
@@ -190,85 +105,38 @@ void WorldRenderer::AddPointsToShape(sf::ConvexShape *oShape, std::vector<Point>
 
 void WorldRenderer::Render()
 {
-	m_oRenderWindow.clear(sf::Color::White);
-
-	m_oRenderWindow.setView(m_oMainGameView);
-
-	RenderEntities();
-
-	if (Locator::WorldManager()->IsLevelLoaded())
+	auto oEntities = Locator::WorldManager()->GetGameObjects();
+	for (auto pEntity : oEntities)
 	{
-		m_oRenderWindow.setTitle(Locator::WorldManager()->LevelName());
+		if (pEntity->deleted)
+			continue;
+
+		auto pRenderable = dynamic_cast<IRendered*>(pEntity);
+		if (pRenderable)
+		{
+			auto pPlayer = (ClientPlayerEntity*)pEntity;
+			if (pPlayer && Locator::GameState()->UpdateClientId() == pPlayer->playerId)
+			{
+				// Smooth the camera position - use 90% of the old, 10% of the entity position
+				// Given time, this is smoothed out. TODO: make this use delta time
+				m_oCamera.position = (m_oCamera.position * .9f) + (pPlayer->position * .1f);
+			}
+
+			DrawRenderable(pEntity, pRenderable);
+		}
 	}
 
-	m_flZoomLevel = 1.0f;
-
-    m_oRenderWindow.display();
-}
-
-void WorldRenderer::ProcessEvents()
-{
-	auto pInputManager = (InputManager*)Locator::InputManager();
-	auto pGameState = (GameState*)Locator::GameState();
-
-	sf::Event event;
-    while (m_oRenderWindow.pollEvent(event))
-    {
-		sf::Vector2i mousePos(event.mouseMove.x, event.mouseMove.y);
-		auto pos = m_pWindowTarget->mapPixelToCoords(mousePos, m_oMainGameView);
-		pInputManager->NewMousePosition(POINT_FROM_SFML(pos));
-
-        if (event.type == sf::Event::Closed)
-			pGameState->SetRunning(false);
-
-		if (event.type == sf::Event::Resized)
-			ResetView();
-
-		Key ePressedKey = KEY_NONE;
-		if (event.type == sf::Event::KeyPressed)
+	if (Locator::GameState()->Settings()->GetBool("debug"))
+	{
+		for (auto pEntity : oEntities)
 		{
-			pInputManager->KeyPress(
-				pInputManager->TranslateKeyCode(event.key.code));
+			if (pEntity->deleted)
+				continue;
 
-			if (event.key.code == sf::Keyboard::F5)
-			{
-				Locator::GameState()->Settings()->SetBool("debug",
-					!Locator::GameState()->Settings()->GetBool("debug"));
-				Locator::GameState()->Settings()->WriteManifest();
-			}
+			DrawDebugText(pEntity);
+			auto pSimulated = dynamic_cast<ISimulated*>(pEntity);
+			if (pSimulated)
+				DrawSimulated(pEntity, pSimulated);
 		}
-
-		if (event.type == sf::Event::MouseButtonPressed)
-		{
-			pInputManager->KeyPress(
-				pInputManager->TranslateKeyCode(event.mouseButton.button));
-		}
-
-		if (event.type == sf::Event::MouseButtonReleased)
-		{
-			pInputManager->KeyRelease(
-				pInputManager->TranslateKeyCode(event.mouseButton.button));
-		}
-
-		if (event.type == sf::Event::MouseWheelMoved)
-		{
-			m_flZoomLevel -= event.mouseWheel.delta / 10.0f;
-		}
-
-		if (event.type == sf::Event::KeyReleased)
-		{
-			pInputManager->KeyRelease(
-				pInputManager->TranslateKeyCode(event.key.code));
-		}
-    }
-}
-
-void WorldRenderer::ResetView()
-{
-	auto oWindowSize = m_oRenderWindow.getSize();
-	Locator::GameState()->Settings()->SetPoint("client_size", POINT_FROM_SFML(oWindowSize));
-	Locator::GameState()->Settings()->WriteManifest();
-
-	m_oMainGameView.setSize(float(oWindowSize.x), float(oWindowSize.y));
-	m_oUiView.setSize(float(oWindowSize.x), float(oWindowSize.y));
+	}
 }
