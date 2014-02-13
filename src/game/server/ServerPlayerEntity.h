@@ -1,13 +1,12 @@
 #pragma once
 
-#include "shared\Manifest.h"
-#include "shared\INetworked.h"
-#include "shared\BasePlayerEntity.h"
+#include "Manifest.h"
+#include "INetworked.h"
+#include "BasePlayerEntity.h"
 
 #include "WorldSimulator.h"
-#include "shared\Key.h"
-
-extern WorldSimulator g_oWorldSimulator;
+#include "Key.h"
+#include "Locator.h"
 
 class ServerPlayerEntity : public BasePlayerEntity, public IServerNetworked
 {
@@ -16,7 +15,7 @@ public:
 	{
 		for (auto pSimulatedBody : GetSimulationData())
 		{
-			g_oWorldSimulator.CreateDynamicBody(this, pSimulatedBody);
+			Locator::WorldSimulator()->CreateDynamicBody(this, pSimulatedBody);
 		}
 	};
 
@@ -25,9 +24,9 @@ public:
 		const float amount = 50;
 		const float max = 100.0f;
 		float x = 0, y = 0;
-		if ((pressedKeys & KEY_UP) && (g_pGameState->time > lastJumpTime + 1000.0f))
+		if ((pressedKeys & KEY_UP) && (Locator::GameState()->Time() > lastJumpTime + 1000.0f))
 		{
-			lastJumpTime = g_pGameState->time;
+			lastJumpTime = Locator::GameState()->Time();
 			y = -(amount * 4);
 		}
 		if (pressedKeys & KEY_RIGHT)

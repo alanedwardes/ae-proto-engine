@@ -1,13 +1,11 @@
 #include "ClientUpdateManager.h"
-#include "shared\UdpCommunicator.h"
-#include "shared\WorldManager.h"
-#include "shared\INetworked.h"
-#include "shared\BaseGameObject.h"
+#include "UdpCommunicator.h"
+#include "INetworked.h"
+#include "BaseGameObject.h"
 #include "InputManager.h"
-
-extern WorldManager g_oWorldManager;
-extern InputManager *g_pInputManager;
-extern std::string g_szWindowTitle;
+#include "Locator.h"
+#include "IWorldManager.h"
+#include "GameState.h"
 
 ClientUpdateManager::ClientUpdateManager()
 {
@@ -52,8 +50,8 @@ void ClientUpdateManager::SendUpdates()
 	{
 		CommunicatorUpdate_t update;
 		update.data << CLIENT_UPDATE_FULL;
-		update.data << g_pInputManager->SampleInput();
-		update.data << g_pInputManager->SampleMousePosition();
+		update.data << Locator::InputManager()->SampleInput();
+		update.data << Locator::InputManager()->SampleMousePosition();
 		update.host = m_oRemoteHost;
 		m_oLastSentUpdate = update;
 		m_pCommunicator->SendPacket(update);
@@ -107,9 +105,15 @@ void ClientUpdateManager::ProcessInitialServerUpdate(CommunicatorData_t data)
 	int updateType;
 	std::string szLevelName;
 	if (data >> updateType >> m_iUpdateClientId >> szLevelName)
-		g_oWorldManager.LoadLevel(szLevelName);
+	{
+		auto pGameState = (GameState*)Locator::GameState();
+		pGameState->SetUpdateClientId(m_iUpdateClientId);
+		Locator::WorldManager()->LoadLevel(szLevelName);
+	}
 	else
+	{
 		Debug::WarningMessage("Initial packet corrupted.");
+	}
 }
 
 void ClientUpdateManager::ProcessServerUpdate(CommunicatorData_t data)
@@ -140,11 +144,11 @@ void ClientUpdateManager::ProcessServerUpdate(CommunicatorData_t data)
 			data >> szSerialised;
 
 			// Try to find it
-			auto pEntity = g_oWorldManager.GetEntityById(oEntityId);
+			auto pEntity = Locator::WorldManager()->GetEntityById(oEntityId);
 			if (pEntity == nullptr)
 			{
 				// Else, create the entity using its type
-				pEntity = g_oWorldManager.CreateEntity(iEntityType);
+				pEntity = Locator::WorldManager()->CreateEntity(iEntityType);
 			}
 
 			// Assert we've got one
@@ -166,7 +170,7 @@ void ClientUpdateManager::ProcessServerUpdate(CommunicatorData_t data)
 			auto iRemovalId = abs(oEntityId);
 
 			// Remove it, after using abs() to make positive
-			auto pEntity = g_oWorldManager.GetEntityById(iRemovalId);
+			auto pEntity = Locator::WorldManager()->GetEntityById(iRemovalId);
 			if (pEntity != nullptr)
 			{
 				pEntity->deleted = true;

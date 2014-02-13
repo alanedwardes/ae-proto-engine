@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "shared\UpdateManager.h"
+#include "UpdateManager.h"
 
 class BasePlayerEntity;
 

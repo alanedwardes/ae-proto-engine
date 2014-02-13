@@ -1,14 +1,11 @@
 #include "WorldSimulator.h"
-#include "shared\WorldManager.h"
-#include "shared\ISimulated.h"
-#include "shared\BaseGameObject.h"
-#include "shared\BaseGameObject.h"
+#include "ISimulated.h"
+#include "BaseGameObject.h"
+#include "BaseGameObject.h"
 
 #define _USE_MATH_DEFINES
 
 #include <math.h>
-
-extern WorldManager g_oWorldManager;
 
 struct SimulationDefinition
 {

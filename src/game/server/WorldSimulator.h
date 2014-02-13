@@ -1,13 +1,14 @@
 #pragma once
 
 #include <vector>
-#include "shared\ISimulated.h"
+#include "ISimulated.h"
 #include "box2d\Box2D.h"
+#include "IWorldSimulator.h"
 
 class BaseGameObject;
 struct SimulationDefinition;
 
-class WorldSimulator
+class WorldSimulator : public IWorldSimulator
 {
 public:
 	WorldSimulator();

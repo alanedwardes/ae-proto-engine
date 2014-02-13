@@ -5,27 +5,28 @@
 
 #include "ServerUpdateManager.h"
 #include "WorldSimulator.h"
-#include "shared\WorldManager.h"
-#include "shared\Manifest.h"
-#include "shared\GameState.h"
-#include "shared\GameObjectFactoryHolder.h"
-
-// Global resources
-bool g_bServerRunning = true;
-Manifest *g_pSettings;
-WorldManager g_oWorldManager;
-WorldSimulator g_oWorldSimulator;
-GameState *g_pGameState;
-
+#include "WorldManager.h"
+#include "Manifest.h"
+#include "GameState.h"
 #include "ServerFactoryManifest.h"
+#include "Locator.h"
 
 void Server::Run()
 {
-	g_pSettings = new Manifest();
-	g_pGameState = new GameState();
+	auto pWorldManager = new WorldManager();
+	Locator::Provide(pWorldManager);
+
+	auto pWorldSimulator = new WorldSimulator;
+	Locator::Provide(pWorldSimulator);
+
+	auto pGameState = new GameState();
+	Locator::Provide(pGameState);
+
+	auto pFactoryManifest = new ServerFactoryManifest();
+	Locator::Provide(pFactoryManifest);
 
 	// Try to read the manifest
-	if (!g_pSettings->ReadManifest("server_manifest.json"))
+	if (!pGameState->Settings()->ReadManifest("server_manifest.json"))
 		return Debug::WarningMessage("Unable to read server_manifest.json");
 
 	// Log the start time
@@ -41,24 +42,24 @@ void Server::Run()
 
 	//// Start the server
 	// Create a network update manager and listen
-	int iListenPort = g_pSettings->GetInt("listen_port");
+	int iListenPort = pGameState->Settings()->GetInt("listen_port");
 	ServerUpdateManager oUpdateManager(iListenPort);
 
 	// Load the level defined in the manifest
-	std::string szLevelName = g_pSettings->GetString("level_name");
-	g_oWorldManager.LoadLevel(szLevelName);
+	std::string szLevelName = pGameState->Settings()->GetString("level_name");
+	pWorldManager->LoadLevel(szLevelName);
 	//// Server start (end)
 
 	// Loop while the server is running
-	while (g_bServerRunning)
+	while (pGameState->Running())
 	{
 		long curTime = (std::clock() - startTime);
-		g_pGameState->time = curTime;
+		pGameState->SetTime(curTime);
 
 		// Receive updates
 		oUpdateManager.ReceiveUpdates();
 
-		g_oWorldSimulator.Simulate(simulationFrequency / 1000.0f);
+		pWorldSimulator->Simulate(simulationFrequency / 1000.0f);
 		lastSimulateTime = curTime;
 
 		// Send out updates
@@ -71,7 +72,4 @@ void Server::Run()
 		std::chrono::milliseconds dura( 16 );
 		std::this_thread::sleep_for( dura );
 	}
-
-	delete g_pSettings;
-	delete g_pGameState;
 }

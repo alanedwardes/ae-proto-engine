@@ -1,26 +1,45 @@
 #pragma once
 
-#include "shared\GameObjectFactory.h"
-EntityFactoryHolder g_oEntityFactoryHolder;
+#include "GameObjectFactory.h"
 
-#include "shared\BaseSimulatedEntity.h"
+#include "BaseSimulatedEntity.h"
 #include "ClientPhysicsEntity.h"
 #include "ClientPlayerEntity.h"
 
-static GameObjectFactory<ClientPhysicsEntity>
-	client_physics_item("physics_item");
+#include "BaseSimulatedGeometry.h"
+#include "BaseRenderedGeometry.h"
 
-static GameObjectFactory<BaseSimulatedEntity>
-	client_static_item("static_item");
+#include "IFactoryManifest.h"
 
-static GameObjectFactory<ClientPlayerEntity>
-	client_player("player");
+class ClientFactoryManifest : public IFactoryManifest
+{
+public:
+	ClientFactoryManifest()
+	{
+		RegisterFactory(new GameObjectFactory<ClientPhysicsEntity>("physics_item", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<BaseSimulatedEntity>("static_item", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<ClientPlayerEntity>("player", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<BaseSimulatedGeometry>("static_brush", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<BaseRenderedGeometry>("detail_brush", m_oFactoryMap.size()));
+	};
 
-#include "shared\BaseSimulatedGeometry.h"
-#include "shared\BaseRenderedGeometry.h"
+	virtual GameObjectFactoryBase* GetFactory(std::string szFactoryType)
+	{
+		for (auto pFactory : m_oFactoryMap)
+			if (pFactory->GetTypeName() == szFactoryType)
+				return pFactory;
 
-static GameObjectFactory<BaseSimulatedGeometry>
-	client_geometry("static_brush");
+		return nullptr;
+	}
 
-static GameObjectFactory<BaseRenderedGeometry>
-	client_detail("detail_brush");
+	virtual GameObjectFactoryBase* GetFactory(int szFactoryTypeId)
+	{
+		return m_oFactoryMap[szFactoryTypeId];
+	}
+private:
+	virtual void RegisterFactory(GameObjectFactoryBase *pFactory)
+	{
+		m_oFactoryMap.push_back(pFactory);
+	};
+	std::vector<GameObjectFactoryBase*> m_oFactoryMap;
+};

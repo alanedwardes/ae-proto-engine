@@ -1,22 +1,33 @@
 #pragma once
 
 #include "BaseGameObject.h"
-#include "GameObjectFactoryHolder.h"
 
-class EntityFactoryBase
+class GameObjectFactoryBase
 {
 public:
 	virtual BaseGameObject* Create() = 0;
+	virtual std::string GetTypeName() = 0;
+	virtual int GetTypeId() = 0;
 };
 
 template <class T>
-class GameObjectFactory : EntityFactoryBase
+class GameObjectFactory : public GameObjectFactoryBase
 {
 public:
-	GameObjectFactory(const char *szTypeName)
+	GameObjectFactory(const char *szTypeName, int iTypeId)
 	{
 		m_szTypeName = szTypeName;
-		m_iTypeId = g_oEntityFactoryHolder.AddEntityFactory(this, szTypeName);
+		m_iTypeId = iTypeId;
+	}
+
+	std::string GetTypeName()
+	{
+		return m_szTypeName;
+	}
+
+	int GetTypeId()
+	{
+		return m_iTypeId;
 	}
 
 	BaseGameObject* Create()

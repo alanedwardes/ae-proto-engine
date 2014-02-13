@@ -1,36 +1,36 @@
 #include "Client.h"
 #include "ClientUpdateManager.h"
 #include "WorldRenderer.h"
-#include "shared\WorldManager.h"
-#include "shared\Manifest.h"
-#include "shared\GameObjectFactoryHolder.h"
-#include "shared\GameState.h"
+#include "WorldManager.h"
+#include "Manifest.h"
 #include "InputManager.h"
-
-// Global resources
-bool g_bClientRunning = true;
-Manifest *g_pSettings;
-WorldManager g_oWorldManager;
-ClientUpdateManager g_oClientUpdateManager;
-InputManager *g_pInputManager;
-GameState *g_pGameState;
-
 #include "ClientFactoryManifest.h"
+#include "GameState.h"
+#include "Locator.h"
 
 void Client::Run()
 {
-	g_pSettings = new Manifest();
-	g_pInputManager = new InputManager();
-	g_pGameState = new GameState();
+	auto pWorldManager = new WorldManager();
+	Locator::Provide(pWorldManager);
+
+	auto pInputManager = new InputManager();
+	Locator::Provide(pInputManager);
+
+	auto pGameState = new GameState();
+	Locator::Provide(pGameState);
+
+	auto pFactoryManifest = new ClientFactoryManifest();
+	Locator::Provide(pFactoryManifest);
 
 	// Try to read the manifest
-	if (!g_pSettings->ReadManifest("client_manifest.json"))
+	if (!pGameState->Settings()->ReadManifest("client_manifest.json"))
 		return Debug::WarningMessage("Unable to read client_manifest.json");
 
 	// Create a network update manager
-	std::string szHost = g_pSettings->GetString("connect_host");
-	int iPort = g_pSettings->GetInt("connect_port");
-	g_oClientUpdateManager.SetConnection(szHost, iPort);
+	std::string szHost = pGameState->Settings()->GetString("connect_host");
+	int iPort = pGameState->Settings()->GetInt("connect_port");
+	auto pClientUpdateManager = new ClientUpdateManager();
+	pClientUpdateManager->SetConnection(szHost, iPort);
 
 	// Create a world renderer
 	WorldRenderer oWorldRenderer;
@@ -43,13 +43,13 @@ void Client::Run()
 	float updateFrequency = 1000 / 30;
 
 	// Loop while the client is running
-	while (g_bClientRunning)
+	while (pGameState->Running())
 	{
 		long curTime = (std::clock() - startTime);
-		g_pGameState->time = curTime;
+		pGameState->SetTime(curTime);
 
 		// Receive updates
-		g_oClientUpdateManager.ReceiveUpdates();
+		pClientUpdateManager->ReceiveUpdates();
 
 		// Process window input events
 		oWorldRenderer.ProcessEvents();
@@ -60,12 +60,8 @@ void Client::Run()
 		// Send out updates
 		if (curTime >= lastUpdateTime + updateFrequency)
 		{
-			g_oClientUpdateManager.SendUpdates();
+			pClientUpdateManager->SendUpdates();
 			lastUpdateTime = curTime;
 		}
 	}
-
-	delete g_pSettings;
-	delete g_pInputManager;
-	delete g_pGameState;
 }

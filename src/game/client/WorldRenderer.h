@@ -1,7 +1,7 @@
 #pragma once
 
 #include "sfml\Graphics.hpp"
-#include "shared\Point.h"
+#include "Point.h"
 
 class IRendered;
 class ISimulated;

@@ -5,8 +5,7 @@
 #include "IRendered.h"
 #include "ISimulated.h"
 #include "StreamSerialiser.h"
-
-extern Manifest *g_pSettings;
+#include "Locator.h"
 
 class BaseSimulatedEntity : public BaseGameObject, public IRendered, public ISimulated
 {
@@ -16,7 +15,7 @@ public:
 		BaseGameObject::LoadManifest(oManifest);
 
 		auto oModelManifest = oManifest.GetIncludedManifest("model",
-			g_pSettings->GetFolder("model_directory"));
+			Locator::GameState()->Settings()->GetFolder("model_directory"));
 
 		auto oSimulationManifests = oModelManifest.GetManifestList("simulate");
 		for (auto oSimulationManifest : oSimulationManifests)

@@ -1,26 +1,41 @@
 #pragma once
 
-#include "shared\GameObjectFactory.h"
-EntityFactoryHolder g_oEntityFactoryHolder;
-
+#include "GameObjectFactory.h"
 #include "ServerPhysicsEntity.h"
 #include "ServerStaticEntity.h"
 #include "ServerPlayerEntity.h"
-
-static GameObjectFactory<ServerPhysicsEntity>
-	server_physics_item("physics_item");
-
-static GameObjectFactory<ServerStaticEntity>
-	server_static_item("static_item");
-
-static GameObjectFactory<ServerPlayerEntity>
-	server_player("player");
-
-#include "shared\BaseRenderedGeometry.h"
+#include "BaseRenderedGeometry.h"
 #include "ServerStaticGeometry.h"
 
-static GameObjectFactory<ServerStaticGeometry>
-	server_geometry("static_brush");
+class ServerFactoryManifest : public IFactoryManifest
+{
+public:
+	ServerFactoryManifest()
+	{
+		RegisterFactory(new GameObjectFactory<ServerPhysicsEntity>("physics_item", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<ServerStaticEntity>("static_item", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<ServerPlayerEntity>("player", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<ServerStaticGeometry>("static_brush", m_oFactoryMap.size()));
+		RegisterFactory(new GameObjectFactory<BaseRenderedGeometry>("detail_brush", m_oFactoryMap.size()));
+	};
 
-static GameObjectFactory<BaseRenderedGeometry>
-	server_detail("detail_brush");
+	virtual GameObjectFactoryBase* GetFactory(std::string szFactoryType)
+	{
+		for (auto pFactory : m_oFactoryMap)
+			if (pFactory->GetTypeName() == szFactoryType)
+				return pFactory;
+
+		return nullptr;
+	}
+
+	virtual GameObjectFactoryBase* GetFactory(int szFactoryTypeId)
+	{
+		return m_oFactoryMap[szFactoryTypeId];
+	}
+private:
+	virtual void RegisterFactory(GameObjectFactoryBase *pFactory)
+	{
+		m_oFactoryMap.push_back(pFactory);
+	};
+	std::vector<GameObjectFactoryBase*> m_oFactoryMap;
+};

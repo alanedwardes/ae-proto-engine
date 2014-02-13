@@ -1,8 +1,8 @@
 #pragma once
 
-#include "shared\Manifest.h"
-#include "shared\INetworked.h"
-#include "shared\BasePlayerEntity.h"
+#include "Manifest.h"
+#include "INetworked.h"
+#include "BasePlayerEntity.h"
 
 #include "ClientUpdateManager.h"
 

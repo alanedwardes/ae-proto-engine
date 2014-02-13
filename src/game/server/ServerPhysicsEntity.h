@@ -1,15 +1,12 @@
 #pragma once
 
-#include "shared\BaseSimulatedEntity.h"
-#pragma once
-
-#include "shared\Manifest.h"
-#include "shared\INetworked.h"
-#include "shared\StreamSerialiser.h"
+#include "BaseSimulatedEntity.h"
+#include "Manifest.h"
+#include "INetworked.h"
+#include "StreamSerialiser.h"
+#include "Locator.h"
 
 #include "WorldSimulator.h"
-
-extern WorldSimulator g_oWorldSimulator;
 
 class ServerPhysicsEntity : public BaseSimulatedEntity, public IServerNetworked
 {
@@ -18,7 +15,7 @@ public:
 	{
 		for (auto pSimulatedBody : GetSimulationData())
 		{
-			g_oWorldSimulator.CreateDynamicBody(this, pSimulatedBody);
+			Locator::WorldSimulator()->CreateDynamicBody(this, pSimulatedBody);
 		}
 	}
 

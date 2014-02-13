@@ -13,7 +13,6 @@ LINK_DIRECTORIES(
 	public/importlibs
 )
 
-INCLUDE(game/shared/shared.cmake)
 INCLUDE(game/client/client.cmake)
 INCLUDE(game/server/server.cmake)
 

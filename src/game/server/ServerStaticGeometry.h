@@ -1,9 +1,8 @@
 #pragma once
 
-#include "shared\BaseSimulatedGeometry.h"
+#include "BaseSimulatedGeometry.h"
 #include "WorldSimulator.h"
-
-extern WorldSimulator g_oWorldSimulator;
+#include "Locator.h"
 
 class ServerStaticGeometry : public BaseSimulatedGeometry
 {
@@ -11,7 +10,7 @@ class ServerStaticGeometry : public BaseSimulatedGeometry
 	{
 		for (auto pSimulatedBody : GetSimulationData())
 		{
-			g_oWorldSimulator.CreateStaticBody(this, pSimulatedBody);
+			Locator::WorldSimulator()->CreateStaticBody(this, pSimulatedBody);
 		}
 	}
 };

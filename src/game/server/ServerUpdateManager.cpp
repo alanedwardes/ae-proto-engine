@@ -1,16 +1,13 @@
 #include "ServerUpdateManager.h"
-#include "shared\UdpCommunicator.h"
-#include "shared\WorldManager.h"
-#include "shared\INetworked.h"
-#include "shared\StreamSerialiser.h"
+#include "UdpCommunicator.h"
+#include "INetworked.h"
+#include "StreamSerialiser.h"
 
-#include "shared\BasePlayerEntity.h"
-#include "shared\Key.h"
+#include "BasePlayerEntity.h"
+#include "Key.h"
+#include "Locator.h"
 
 #include <chrono>
-
-extern WorldManager g_oWorldManager;
-extern Manifest *g_pSettings;
 
 ServerUpdateManager::ServerUpdateManager(int iListenPort)
 {
@@ -47,7 +44,7 @@ long ServerUpdateManager::GetCurrentTime()
 void ServerUpdateManager::SendUpdates()
 {
 	long lCurrentTime = GetCurrentTime();
-	int iClientTimeout = g_pSettings->GetInt("client_timeout", 10) * 1000;
+	int iClientTimeout = Locator::GameState()->Settings()->GetInt("client_timeout", 10) * 1000;
 
 	for (auto pUpdateClient : m_oUpdateClients)
 	{
@@ -99,7 +96,9 @@ void ServerUpdateManager::SendInitialClientUpdate(UpdateClient_t *updateClient)
 	// Initial update - contains level name
 	CommunicatorUpdate_t update;
 	update.host = updateClient->host;
-	update.data << SERVER_UPDATE_INITIAL << updateClient->updateClientId << g_oWorldManager.LevelFilename();
+	update.data << SERVER_UPDATE_INITIAL;
+	update.data << updateClient->updateClientId;
+	update.data << Locator::WorldManager()->LevelFilename();
 	m_pSendingCommunicator->SendPacket(update);
 
 	// Set the last sent update type
@@ -110,7 +109,7 @@ void ServerUpdateManager::SendClientUpdate(UpdateClient_t *updateClient)
 {
 	CommunicatorUpdate_t update;
 	update.host = updateClient->host;
-	auto oEntities = g_oWorldManager.GetGameObjects();
+	auto oEntities = Locator::WorldManager()->GetGameObjects();
 	auto iEntitiesInPacket = 0;
 	for (auto pEntity : oEntities)
 	{
@@ -178,7 +177,7 @@ void ServerUpdateManager::ProcessInitialClientUpdate(CommunicatorUpdate_t update
 
 	auto updateClientId = GenerateUpdateClientId();
 
-	auto pPlayer = (BasePlayerEntity*)g_oWorldManager.CreateEntity("player");
+	auto pPlayer = (BasePlayerEntity*)Locator::WorldManager()->CreateEntity("player");
 	pPlayer->playerId = updateClientId;
 
 	auto pUpdateClient = new UpdateClient_t();

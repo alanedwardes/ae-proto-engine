@@ -4,13 +4,13 @@
 #include <map>
 #include <string>
 #include <memory>
-#include "Manifest.h"
+#include "IWorldManager.h"
 
 class BaseGameObject;
-class EntityFactoryBase;
+class GameObjectFactoryBase;
 class GeometryFactoryBase;
 
-class WorldManager
+class WorldManager : public IWorldManager
 {
 public:
 	WorldManager();
@@ -23,16 +23,11 @@ public:
 	virtual bool IsLevelLoaded() { return (m_szLevelFilename.length() > 0); }
 	virtual std::string LevelFilename() { return m_szLevelFilename; }
 	virtual std::string LevelName();
-	virtual void AddEntityFactory(EntityFactoryBase *pEntityFactory, const char *szTypeName, int iTypeId);
-	virtual EntityFactoryBase* GetEntityFactory(std::string szTypeName);
-	virtual EntityFactoryBase* GetEntityFactory(int iTypeId);
 	virtual BaseGameObject* GetEntityById(signed int oEntityId);
 private:
 	virtual void AddEntity(BaseGameObject *pEntity);
-	virtual BaseGameObject* CreateEntityFromFactory(EntityFactoryBase *pFactoryBase, Manifest oManifest);
+	virtual BaseGameObject* CreateEntityFromFactory(GameObjectFactoryBase *pFactoryBase, Manifest oManifest);
 	std::vector<BaseGameObject*> m_oGameObjects;
 	std::string m_szLevelFilename;
-	std::map<std::string, EntityFactoryBase*> m_oEntityFactoryTypeNameMap;
-	std::map<int, EntityFactoryBase*> m_oEntityFactoryTypeIdMap;
 	std::unique_ptr<Manifest> m_pLevelManifest;
 };

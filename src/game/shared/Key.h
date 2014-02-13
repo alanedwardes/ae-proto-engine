@@ -1,3 +1,5 @@
+#pragma once
+
 enum Key
 {
 	KEY_NONE     = 0,

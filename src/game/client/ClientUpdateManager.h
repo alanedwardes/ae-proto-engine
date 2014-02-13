@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shared\UpdateManager.h"
+#include "UpdateManager.h"
 
 #include <memory>
 

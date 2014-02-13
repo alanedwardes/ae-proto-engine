@@ -1,115 +1,118 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(WD ${CMAKE_CURRENT_LIST_DIR}/)
-SET(SHARED_TARGET shared)
+SET(SHAREDWD ${CMAKE_CURRENT_LIST_DIR}/)
 
 INCLUDE_DIRECTORIES(
-	${WD}../../public/headers/shared
+	${SHAREDWD}
 )
 
-SET(${SHARED_TARGET}_SOURCE_FILES
+SET(SHARED_SOURCE_FILES
 	${CMAKE_CURRENT_LIST_FILE}
-	${WD}BaseGameObject.cpp
-	${WD}Compressor.cpp
-	${WD}GameObjectFactoryHolder.cpp
-	${WD}Manifest.cpp
-	${WD}StreamSerialiser.cpp
-	${WD}TcpCommunicator.cpp
-	${WD}UdpCommunicator.cpp
-	${WD}WorldManager.cpp
-	${WD}../../public/headers/shared/BaseGameObject.h
-	${WD}../../public/headers/shared/BasePlayerEntity.h
-	${WD}../../public/headers/shared/BaseRenderedGeometry.h
-	${WD}../../public/headers/shared/BaseSimulatedGeometry.h
-	${WD}../../public/headers/shared/Communicator.h
-	${WD}../../public/headers/shared/Compressor.h
-	${WD}../../public/headers/shared/Debug.h
-	${WD}../../public/headers/shared/GameObjectFactory.h
-	${WD}../../public/headers/shared/GameObjectFactoryHolder.h
-	${WD}../../public/headers/shared/INetworked.h
-	${WD}../../public/headers/shared/IRendered.h
-	${WD}../../public/headers/shared/ISimulated.h
-	${WD}../../public/headers/shared/Key.h
-	${WD}../../public/headers/shared/Manifest.h
-	${WD}../../public/headers/shared/BaseSimulatedEntity.h
-	${WD}../../public/headers/shared/Point.h
-	${WD}../../public/headers/shared/Polygon.h
-	${WD}../../public/headers/shared/GameState.h
-	${WD}../../public/headers/shared/StreamSerialiser.h
-	${WD}../../public/headers/shared/UpdateManager.h
-	${WD}../../public/headers/shared/TcpCommunicator.h
-	${WD}../../public/headers/shared/UdpCommunicator.h
-	${WD}../../public/headers/shared/Vector.h
-	${WD}../../public/headers/shared/WorldManager.h
+	${SHAREDWD}BaseGameObject.cpp
+	${SHAREDWD}Compressor.cpp
+	${SHAREDWD}Manifest.cpp
+	${SHAREDWD}StreamSerialiser.cpp
+	${SHAREDWD}TcpCommunicator.cpp
+	${SHAREDWD}UdpCommunicator.cpp
+	${SHAREDWD}WorldManager.cpp
+	${SHAREDWD}BaseGameObject.h
+	${SHAREDWD}BasePlayerEntity.h
+	${SHAREDWD}BaseRenderedGeometry.h
+	${SHAREDWD}BaseSimulatedGeometry.h
+	${SHAREDWD}Communicator.h
+	${SHAREDWD}Compressor.h
+	${SHAREDWD}Debug.h
+	${SHAREDWD}GameObjectFactory.h
+	${SHAREDWD}INetworked.h
+	${SHAREDWD}IRendered.h
+	${SHAREDWD}ISimulated.h
+	${SHAREDWD}Key.h
+	${SHAREDWD}Manifest.h
+	${SHAREDWD}BaseSimulatedEntity.h
+	${SHAREDWD}Point.h
+	${SHAREDWD}Polygon.h
+	${SHAREDWD}StreamSerialiser.h
+	${SHAREDWD}UpdateManager.h
+	${SHAREDWD}GameState.h
+	${SHAREDWD}TcpCommunicator.h
+	${SHAREDWD}UdpCommunicator.h
+	${SHAREDWD}Vector.h
+	${SHAREDWD}WorldManager.h
+	${SHAREDWD}Locator.h
+	${SHAREDWD}Locator.cpp
+	${SHAREDWD}IWorldManager.h
+	${SHAREDWD}IWorldSimulator.h
+	${SHAREDWD}IInputManager.h
+	${SHAREDWD}IGameState.h
+	${SHAREDWD}IFactoryManifest.h
 )
 
-SOURCE_GROUP("" FILES
+SOURCE_GROUP("Shared" FILES
 	${CMAKE_CURRENT_LIST_FILE}
 )
 
-SOURCE_GROUP("Data" FILES 
-	${WD}../../public/headers/shared/Point.h
-	${WD}../../public/headers/shared/Vector.h
-	${WD}../../public/headers/shared/Key.h
-	${WD}../../public/headers/shared/Polygon.h
+SOURCE_GROUP("Shared\\Data" FILES 
+	${SHAREDWD}Point.h
+	${SHAREDWD}Vector.h
+	${SHAREDWD}Key.h
+	${SHAREDWD}Polygon.h
 )
 
-SOURCE_GROUP("Game Objects\\BaseGeometry" FILES 
-	${WD}../../public/headers/shared/BaseSimulatedGeometry.h
-	${WD}../../public/headers/shared/BaseRenderedGeometry.h
+SOURCE_GROUP("Shared\\Game Objects\\BaseGeometry" FILES 
+	${SHAREDWD}BaseSimulatedGeometry.h
+	${SHAREDWD}BaseRenderedGeometry.h
 )
 
-SOURCE_GROUP("Game Objects\\Behaviours" FILES 
-	${WD}../../public/headers/shared/ISimulated.h
-	${WD}../../public/headers/shared/IRendered.h
-	${WD}../../public/headers/shared/INetworked.h
-	${WD}../../public/headers/shared/IProcessed.h
+SOURCE_GROUP("Shared\\Game Objects\\Behaviours" FILES 
+	${SHAREDWD}ISimulated.h
+	${SHAREDWD}IRendered.h
+	${SHAREDWD}INetworked.h
+	${SHAREDWD}IProcessed.h
 )
 
-SOURCE_GROUP("Game Objects\\BaseEntities" FILES 
-	${WD}../../public/headers/shared/BasePlayerEntity.h
-	${WD}../../public/headers/shared/BaseSimulatedEntity.h
+SOURCE_GROUP("Shared\\Game Objects\\BaseEntities" FILES 
+	${SHAREDWD}BasePlayerEntity.h
+	${SHAREDWD}BaseSimulatedEntity.h
 )
 
-SOURCE_GROUP("Systems" FILES 
-	${WD}WorldManager.cpp
-	${WD}GameObjectFactoryHolder.cpp
-	${WD}../../public/headers/shared/UpdateManager.h
-	${WD}../../public/headers/shared/WorldManager.h
-	${WD}../../public/headers/shared/GameObjectFactory.h
-	${WD}../../public/headers/shared/GameObjectFactoryHolder.h
+SOURCE_GROUP("Shared\\Services" FILES
+	${SHAREDWD}Locator.h
+	${SHAREDWD}Locator.cpp
+	${SHAREDWD}IWorldManager.h
+	${SHAREDWD}IWorldSimulator.h
+	${SHAREDWD}IGameState.h
+	${SHAREDWD}IInputManager.h
+	${SHAREDWD}IFactoryManifest.h
 )
 
-SOURCE_GROUP("Utilities" FILES 
-	${WD}Manifest.cpp
-	${WD}StreamSerialiser.cpp
-	${WD}Compressor.cpp
-	${WD}../../public/headers/shared/StreamSerialiser.h
-	${WD}../../public/headers/shared/Manifest.h
-	${WD}../../public/headers/shared/Debug.h
-	${WD}../../public/headers/shared/Compressor.h
-	${WD}../../public/headers/shared/GameState.h
+SOURCE_GROUP("Shared\\Systems" FILES 
+	${SHAREDWD}WorldManager.cpp
+	${SHAREDWD}UpdateManager.h
+	${SHAREDWD}WorldManager.h
+	${SHAREDWD}GameState.h
+	${SHAREDWD}GameObjectFactory.h
 )
 
-SOURCE_GROUP("Game Objects" FILES 
-	${WD}BaseGameObject.cpp
-	${WD}../../public/headers/shared/BaseGameObject.h
+SOURCE_GROUP("Shared\\Utilities" FILES 
+	${SHAREDWD}Manifest.cpp
+	${SHAREDWD}StreamSerialiser.cpp
+	${SHAREDWD}Compressor.cpp
+	${SHAREDWD}StreamSerialiser.h
+	${SHAREDWD}Manifest.h
+	${SHAREDWD}Debug.h
+	${SHAREDWD}Compressor.h
+	${SHAREDWD}GameState.h
 )
 
-SOURCE_GROUP("Network" FILES 
-	${WD}UdpCommunicator.cpp
-	${WD}TcpCommunicator.cpp
-	${WD}../../public/headers/shared/TcpCommunicator.h
-	${WD}../../public/headers/shared/UdpCommunicator.h
-	${WD}../../public/headers/shared/Communicator.h
+SOURCE_GROUP("Shared\\Game Objects" FILES 
+	${SHAREDWD}BaseGameObject.cpp
+	${SHAREDWD}BaseGameObject.h
 )
 
-ADD_LIBRARY(${SHARED_TARGET} STATIC ${${SHARED_TARGET}_SOURCE_FILES})
-
-SET_TARGET_PROPERTIES(${SHARED_TARGET}
-	PROPERTIES
-	COMPILE_FLAGS "/FIDebug.h"
-	COMPILE_DEFINITIONS SFML_STATIC
-	ARCHIVE_OUTPUT_DIRECTORY_DEBUG   "${WD}../../public/staticlibs/shared"
-	ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${WD}../../public/staticlibs/shared"
+SOURCE_GROUP("Shared\\Network" FILES 
+	${SHAREDWD}UdpCommunicator.cpp
+	${SHAREDWD}TcpCommunicator.cpp
+	${SHAREDWD}TcpCommunicator.h
+	${SHAREDWD}UdpCommunicator.h
+	${SHAREDWD}Communicator.h
 )

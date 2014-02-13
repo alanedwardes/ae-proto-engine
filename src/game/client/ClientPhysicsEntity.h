@@ -1,8 +1,8 @@
 #pragma once
 
-#include "shared\BaseSimulatedEntity.h"
-#include "shared\INetworked.h"
-#include "shared\StreamSerialiser.h"
+#include "BaseSimulatedEntity.h"
+#include "INetworked.h"
+#include "StreamSerialiser.h"
 
 class ClientPhysicsEntity : public BaseSimulatedEntity, public IClientNetworked
 {

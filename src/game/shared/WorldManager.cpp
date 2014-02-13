@@ -4,10 +4,9 @@
 #include <streambuf>
 #include "GameObjectFactory.h"
 #include "WorldManager.h"
+#include "Locator.h"
 
 #include "stlplus\file_system.hpp"
-
-extern Manifest *g_pSettings;
 
 WorldManager::WorldManager()
 {
@@ -49,7 +48,7 @@ void WorldManager::LoadLevel(std::string szLevelFilename)
 	RemoveAllEntities();
 	m_szLevelFilename = "";
 
-	std::string szLevelFolder = g_pSettings->GetFolder("level_directory");
+	std::string szLevelFolder = Locator::GameState()->Settings()->GetFolder("level_directory");
 	std::string szLevelPath = stlplus::create_filespec(szLevelFolder, szLevelFilename);
 
 	if (!m_pLevelManifest->ReadManifest(szLevelPath))
@@ -75,27 +74,27 @@ void WorldManager::LoadLevel(std::string szLevelFilename)
 BaseGameObject* WorldManager::CreateEntity(Manifest oManifest)
 {
 	auto szEntityManifestType = oManifest.GetString("type");
-	auto pEntityFactory = GetEntityFactory(szEntityManifestType);
-	assert(pEntityFactory);
-	auto pEntity = CreateEntityFromFactory(pEntityFactory, oManifest);
+	auto pGameObjectFactory = Locator::FactoryManifest()->GetFactory(szEntityManifestType);
+	assert(pGameObjectFactory);
+	auto pEntity = CreateEntityFromFactory(pGameObjectFactory, oManifest);
 	return pEntity;
 }
 
 BaseGameObject* WorldManager::CreateEntity(std::string szTypeName, Manifest oManifest)
 {
-	auto pEntityFactory = GetEntityFactory(szTypeName);
-	assert(pEntityFactory);
-	return CreateEntityFromFactory(pEntityFactory, oManifest);
+	auto pGameObjectFactory = Locator::FactoryManifest()->GetFactory(szTypeName);
+	assert(pGameObjectFactory);
+	return CreateEntityFromFactory(pGameObjectFactory, oManifest);
 }
 
 BaseGameObject* WorldManager::CreateEntity(int iTypeId, Manifest oManifest)
 {
-	auto pEntityFactory = GetEntityFactory(iTypeId);
-	assert(pEntityFactory);
-	return CreateEntityFromFactory(pEntityFactory, oManifest);
+	auto pGameObjectFactory = Locator::FactoryManifest()->GetFactory(iTypeId);
+	assert(pGameObjectFactory);
+	return CreateEntityFromFactory(pGameObjectFactory, oManifest);
 }
 
-BaseGameObject* WorldManager::CreateEntityFromFactory(EntityFactoryBase *pFactoryBase, Manifest oManifest)
+BaseGameObject* WorldManager::CreateEntityFromFactory(GameObjectFactoryBase *pFactoryBase, Manifest oManifest)
 {
 	if (pFactoryBase == nullptr)
 	{
@@ -113,20 +112,4 @@ BaseGameObject* WorldManager::CreateEntityFromFactory(EntityFactoryBase *pFactor
 std::string WorldManager::LevelName()
 {
 	return m_pLevelManifest->GetString("name", m_szLevelFilename);
-}
-
-void WorldManager::AddEntityFactory(EntityFactoryBase *pEntityFactory, const char *szTypeName, int iTypeId)
-{
-	m_oEntityFactoryTypeNameMap[szTypeName] = pEntityFactory;
-	m_oEntityFactoryTypeIdMap[iTypeId] = pEntityFactory;
-}
-
-EntityFactoryBase* WorldManager::GetEntityFactory(std::string szTypeName)
-{
-	return m_oEntityFactoryTypeNameMap[szTypeName];
-}
-
-EntityFactoryBase* WorldManager::GetEntityFactory(int iTypeId)
-{
-	return m_oEntityFactoryTypeIdMap[iTypeId];
 }

@@ -12,6 +12,7 @@ public:
 		BaseSimulatedEntity::LoadManifest(oManifest);
 	};
 
+	bool isCurrentPlayer;
 	int playerId;
 	short pressedKeys;
 	Point mousePos;

@@ -1,9 +1,7 @@
 #pragma once
 
-#include "shared\BaseSimulatedEntity.h"
-#include "WorldSimulator.h"
-
-extern WorldSimulator g_oWorldSimulator;
+#include "BaseSimulatedEntity.h"
+#include "Locator.h"
 
 class ServerStaticEntity : public BaseSimulatedEntity
 {
@@ -11,7 +9,7 @@ class ServerStaticEntity : public BaseSimulatedEntity
 	{
 		for (auto pSimulatedBody : GetSimulationData())
 		{
-			g_oWorldSimulator.CreateStaticBody(this, pSimulatedBody);
+			Locator::WorldSimulator()->CreateStaticBody(this, pSimulatedBody);
 		}
 	}
 };

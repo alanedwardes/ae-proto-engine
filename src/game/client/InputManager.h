@@ -1,8 +1,9 @@
-#include "shared\Key.h"
+#include "Key.h"
 
 #include "sfml\Graphics.hpp"
+#include "IInputManager.h"
 
-class InputManager
+class InputManager : public IInputManager
 {
 public:
 	virtual Key TranslateKeyCode(sf::Keyboard::Key eKey)
