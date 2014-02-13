@@ -45,6 +45,7 @@ SET(SHARED_SOURCE_FILES
 	${SHAREDWD}IInputManager.h
 	${SHAREDWD}IGameState.h
 	${SHAREDWD}IFactoryManifest.h
+	${SHAREDWD}IDrawing.h
 )
 
 SOURCE_GROUP("Shared" FILES
@@ -83,6 +84,7 @@ SOURCE_GROUP("Shared\\Services" FILES
 	${SHAREDWD}IGameState.h
 	${SHAREDWD}IInputManager.h
 	${SHAREDWD}IFactoryManifest.h
+	${SHAREDWD}IDrawing.h
 )
 
 SOURCE_GROUP("Shared\\Systems" FILES 

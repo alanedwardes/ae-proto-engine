@@ -7,6 +7,7 @@
 #include "ClientFactoryManifest.h"
 #include "GameState.h"
 #include "Locator.h"
+#include "Drawing.h"
 
 void Client::Run()
 {
@@ -21,6 +22,9 @@ void Client::Run()
 
 	auto pFactoryManifest = new ClientFactoryManifest();
 	Locator::Provide(pFactoryManifest);
+
+	auto pDrawing = new Drawing();
+	Locator::Provide(pDrawing);
 
 	// Try to read the manifest
 	if (!pGameState->Settings()->ReadManifest("client_manifest.json"))

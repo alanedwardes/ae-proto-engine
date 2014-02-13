@@ -17,6 +17,12 @@ SET(${CLIENT_TARGET}_SOURCE_FILES
 	${WD}ClientFactoryManifest.h
 	${WD}InputManager.h
 	${WD}WorldRenderer.h
+	${WD}TopView.h
+	${WD}View.h
+	${WD}Button.h
+	${WD}Drawing.h
+	${WD}WindowManager.h
+	${WD}WindowManager.cpp
 )
 
 SOURCE_GROUP("" FILES 
@@ -25,8 +31,14 @@ SOURCE_GROUP("" FILES
 	${WD}Client.cpp
 )
 
-SOURCE_GROUP("Services" FILES 
+SOURCE_GROUP("UI" FILES
+	${WD}TopView.h
+	${WD}View.h
+	${WD}Button.h
+)
 
+SOURCE_GROUP("Services" FILES 
+	${WD}Drawing.h
 )
 
 SOURCE_GROUP("Systems" FILES
@@ -35,6 +47,8 @@ SOURCE_GROUP("Systems" FILES
 	${WD}InputManager.h
 	${WD}WorldRenderer.h
 	${WD}WorldRenderer.cpp
+	${WD}WindowManager.h
+	${WD}WindowManager.cpp
 )
 
 SOURCE_GROUP("Game Objects" FILES 
