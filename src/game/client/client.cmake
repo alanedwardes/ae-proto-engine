@@ -4,6 +4,7 @@ SET(WD ${CMAKE_CURRENT_LIST_DIR}/)
 SET(CLIENT_TARGET client)
 
 SET(${CLIENT_TARGET}_SOURCE_FILES
+	${CMAKE_CURRENT_LIST_FILE}
 	${WD}Client.cpp
 	${WD}ClientUpdateManager.cpp
 	${WD}WorldRenderer.cpp
@@ -17,6 +18,7 @@ SET(${CLIENT_TARGET}_SOURCE_FILES
 )
 
 SOURCE_GROUP("" FILES 
+	${CMAKE_CURRENT_LIST_FILE}
 	${WD}Client.h
 	${WD}Client.cpp
 )

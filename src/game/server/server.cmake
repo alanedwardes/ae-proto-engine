@@ -4,6 +4,7 @@ SET(WD ${CMAKE_CURRENT_LIST_DIR}/)
 SET(SERVER_TARGET server)
 
 SET(${SERVER_TARGET}_SOURCE_FILES
+	${CMAKE_CURRENT_LIST_FILE}
 	${WD}Server.cpp
 	${WD}ServerUpdateManager.cpp
 	${WD}WorldSimulator.cpp
@@ -17,6 +18,7 @@ SET(${SERVER_TARGET}_SOURCE_FILES
 )
 
 SOURCE_GROUP("" FILES 
+	${CMAKE_CURRENT_LIST_FILE}
 	${WD}Server.h
 	${WD}Server.cpp
 )

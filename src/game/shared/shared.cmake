@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
 )
 
 SET(${SHARED_TARGET}_SOURCE_FILES
+	${CMAKE_CURRENT_LIST_FILE}
 	${WD}BaseGameObject.cpp
 	${WD}Compressor.cpp
 	${WD}GameObjectFactoryHolder.cpp
@@ -40,6 +41,10 @@ SET(${SHARED_TARGET}_SOURCE_FILES
 	${WD}../../public/headers/shared/UdpCommunicator.h
 	${WD}../../public/headers/shared/Vector.h
 	${WD}../../public/headers/shared/WorldManager.h
+)
+
+SOURCE_GROUP("" FILES
+	${CMAKE_CURRENT_LIST_FILE}
 )
 
 SOURCE_GROUP("Data" FILES 
