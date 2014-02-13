@@ -20,13 +20,10 @@ private:
 	virtual void DrawRenderable(BaseGameObject *pEntity, IRendered* pRenderable);
 	virtual void DrawSimulated(BaseGameObject *pEntity, ISimulated* pSimulated);
 	virtual void DrawDebugText(BaseGameObject *pEntity);
-	virtual void AddPointsToShape(sf::ConvexShape *oShape, std::vector<Point> *pPoints);
-	virtual sf::Texture* GetTexture(RenderedPolygon *pPolygon);
 	sf::RenderWindow m_oRenderWindow;
 	sf::RenderTarget* m_pWindowTarget;
 	sf::Image m_oWindowIcon;
 	int m_iDebugFont;
 	float m_flZoomLevel;
 	Camera m_oCamera;
-	std::vector<sf::Texture*> m_oLoadedTextures;
 };

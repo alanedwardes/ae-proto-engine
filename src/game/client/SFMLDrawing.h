@@ -16,17 +16,61 @@ public:
 		m_cLastColor = color;
 	}
 
-	virtual void DrawShape(sf::Drawable *pDrawable)
+	virtual void SetTexture(int iTextureResource, bool bFill)
 	{
-		m_pRT->draw(*pDrawable);
+		m_iLastTextureResource = iTextureResource;
+		m_bLastTextureFillState = bFill;
 	}
 
-	virtual void DrawRectangle(Point size, Point position)
+	virtual void DrawRectangle(Point size, Point position, float rotation)
 	{
-		sf::RectangleShape shape(POINT_TO_SFML(size));
-		shape.setPosition(POINT_TO_SFML(position));
-		shape.setFillColor(COLOR_TO_SFML(m_cLastColor));
-		DrawShape(&shape);
+		sf::RectangleShape oShape(POINT_TO_SFML(size));
+		oShape.setPosition(POINT_TO_SFML(position));
+		oShape.setRotation(rotation);
+		oShape.setFillColor(COLOR_TO_SFML(m_cLastColor));
+
+		if (m_iLastTextureResource > -1)
+		{
+			oShape.setTexture(m_oTextureResources[m_iLastTextureResource]);
+
+			if (!m_bLastTextureFillState)
+			{
+				auto poSize = oShape.getLocalBounds();
+				oShape.setTextureRect(sf::IntRect(0, 0,
+					int(poSize.width), int(poSize.height)));
+			}
+		}
+
+		DrawShape(&oShape);
+	}
+
+	virtual void DrawPolygon(Polygon polygon, Point position, float rotation)
+	{
+		sf::ConvexShape oShape;
+		int iNumPoints = polygon.points.size();
+		oShape.setPointCount(iNumPoints);
+		oShape.setRotation(rotation);
+		oShape.setPosition(POINT_TO_SFML(position));
+		for (int i = 0; i < iNumPoints; i++)
+		{
+			Point poPoint = polygon.points.at(i);
+			oShape.setPoint(i, POINT_TO_SFML(poPoint));
+		}
+		oShape.setFillColor(COLOR_TO_SFML(m_cLastColor));
+
+		if (m_iLastTextureResource > -1)
+		{
+			oShape.setTexture(m_oTextureResources[m_iLastTextureResource]);
+
+			if (!m_bLastTextureFillState)
+			{
+				auto poSize = oShape.getLocalBounds();
+				oShape.setTextureRect(sf::IntRect(0, 0,
+					int(poSize.width), int(poSize.height)));
+			}
+		}
+
+		DrawShape(&oShape);
 	}
 
 	virtual void AddRenderCallbackObject(IRenderCallback *pRenderCallback)
@@ -60,21 +104,43 @@ public:
 		return iFontIndex;
 	}
 
-	virtual void DrawText(std::string szText, int iFontResource, int iSize, Point position)
+	virtual int LoadTextureResource(std::string szFilename)
+	{
+		auto pTexture = new sf::Texture();
+		pTexture->loadFromFile(szFilename);
+		pTexture->setSmooth(true);
+		auto iTextureIndex = m_oTextureResources.size();
+		m_oTextureResources.push_back(pTexture);
+		return iTextureIndex;
+	}
+
+	virtual void DrawText(std::string szText, int iFontResource, int iSize, Point position, float rotation)
 	{
 		sf::Text text;
 		text.setFont(*m_oFontResources[iFontResource]);
 		text.setCharacterSize(iSize);
 		text.setString(szText);
+		text.setRotation(rotation);
 		text.setPosition(POINT_TO_SFML(position));
 		text.setColor(COLOR_TO_SFML(m_cLastColor));
 		DrawShape(&text);
 	}
 
 	virtual void SetRenderTarget(sf::RenderTarget *pRT){ m_pRT = pRT; }
+
 private:
+	virtual void DrawShape(sf::Drawable *pDrawable)
+	{
+		m_pRT->draw(*pDrawable);
+		m_cLastColor = Color();
+		m_iLastTextureResource = -1;
+		m_bLastTextureFillState = false;
+	}
 	Color m_cLastColor;
+	int m_iLastTextureResource = -1;
+	bool m_bLastTextureFillState = false;
 	std::vector<IRenderCallback*> m_oRenderers;
+	std::vector<sf::Texture*> m_oTextureResources;
 	std::vector<sf::Font*> m_oFontResources;
 	sf::RenderTarget *m_pRT;
 };

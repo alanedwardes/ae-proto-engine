@@ -24,7 +24,7 @@ struct RenderedPolygon
 
 	bool fill = false;
 	std::string texturePath;
-	int polygonReference = -1;
+	int textureReference = -1;
 	Polygon polygon;
 };
 

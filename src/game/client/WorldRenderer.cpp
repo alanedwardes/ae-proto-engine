@@ -16,25 +16,6 @@ WorldRenderer::WorldRenderer()
 	Locator::Drawing()->AddRenderCallbackObject(this);
 }
 
-sf::Texture* WorldRenderer::GetTexture(RenderedPolygon *pPolygon)
-{
-	auto iTextureIndex = pPolygon->polygonReference;
-	if (iTextureIndex >= m_oLoadedTextures.size() || iTextureIndex < 0)
-	{
-		auto pTexture = new sf::Texture();
-		pTexture->setSmooth(true);
-		pTexture->setRepeated(true);
-		pTexture->loadFromFile(pPolygon->texturePath);
-		pPolygon->polygonReference = m_oLoadedTextures.size();
-		m_oLoadedTextures.push_back(pTexture);
-		return pTexture;
-	}
-	else
-	{
-		return m_oLoadedTextures[iTextureIndex];
-	}
-}
-
 void WorldRenderer::DrawDebugText(BaseGameObject *pEntity)
 {
 	Locator::Drawing()->SetColor(Color(0, 0, 0));
@@ -46,30 +27,23 @@ void WorldRenderer::DrawRenderable(BaseGameObject *pEntity, IRendered *pRenderab
 	auto oRenderables = pRenderable->GetRenderables();
 	for (auto pPoly : oRenderables)
 	{
-		const float dumbSmoothFactor = 0.75f;
-
-		sf::ConvexShape oShape;
-		AddPointsToShape(&oShape, &pPoly->polygon.points);
-
-		Point poPosition = (pRenderable->lastPosition * dumbSmoothFactor) + (pEntity->position * (1.0f - dumbSmoothFactor));
-		oShape.setPosition(POINT_TO_SFML(poPosition));
-		pRenderable->lastPosition = poPosition;
-
-		float flRoation = (pRenderable->lastRotation * dumbSmoothFactor) + (pEntity->rotation * (1.0f - dumbSmoothFactor));
-		oShape.setRotation(flRoation);
-		pRenderable->lastRotation = flRoation;
-
-		auto pTexture = GetTexture(pPoly);
-		oShape.setTexture(pTexture);
-
-		if (!pPoly->fill)
+		if (pPoly->textureReference < 0)
 		{
-			auto poSize = oShape.getLocalBounds();
-			oShape.setTextureRect(sf::IntRect(0, 0,
-				int(poSize.width), int(poSize.height)));
+			Debug::DebugMessage("Loading texture %", pPoly->texturePath);
+			pPoly->textureReference = Locator::Drawing()->LoadTextureResource(pPoly->texturePath);
 		}
 
-		((SFMLDrawing*)Locator::Drawing())->DrawShape(&oShape);
+		const float dumbSmoothFactor = 0.75f;
+
+		pRenderable->lastPosition = (pRenderable->lastPosition * dumbSmoothFactor)
+			+ (pEntity->position * (1.0f - dumbSmoothFactor));
+
+		pRenderable->lastRotation = (pRenderable->lastRotation * dumbSmoothFactor)
+			+ (pEntity->rotation * (1.0f - dumbSmoothFactor));
+
+		Locator::Drawing()->SetTexture(pPoly->textureReference, pPoly->fill);
+		Locator::Drawing()->DrawPolygon(pPoly->polygon, pRenderable->lastPosition,
+			pRenderable->lastRotation);
 	}
 }
 
@@ -78,28 +52,9 @@ void WorldRenderer::DrawSimulated(BaseGameObject* pEntity, ISimulated* pSimulate
 	auto oSimulations = pSimulated->GetSimulationData();
 	for (auto pSimulated : oSimulations)
 	{
-		sf::ConvexShape oShape;
-		AddPointsToShape(&oShape, &pSimulated->polygon.points);
-
-		oShape.setPosition(POINT_TO_SFML(pEntity->position));
-		oShape.setRotation(pEntity->rotation);
-
-		oShape.setFillColor(sf::Color(255, 0, 0, 64));
-		oShape.setOutlineColor(sf::Color(255, 0, 0, 192));
-		oShape.setOutlineThickness(1.0f);
-
-		((SFMLDrawing*)Locator::Drawing())->DrawShape(&oShape);
-	}
-}
-
-void WorldRenderer::AddPointsToShape(sf::ConvexShape *oShape, std::vector<Point> *pPoints)
-{
-	int iNumPoints = pPoints->size();
-	oShape->setPointCount(iNumPoints);
-	for (int i = 0; i < iNumPoints; i++)
-	{
-		Point poPoint = pPoints->at(i);
-		oShape->setPoint(i, POINT_TO_SFML(poPoint));
+		Locator::Drawing()->SetColor(Color(255, 0, 0, 64));
+		Locator::Drawing()->DrawPolygon(pSimulated->polygon,
+			pEntity->position, pEntity->rotation);
 	}
 }
 
