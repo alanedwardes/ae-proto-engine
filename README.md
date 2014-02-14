@@ -1,7 +1,7 @@
 ae-proto-engine
 ===============
 
-Little prototype networked game engine written in C++:
+Prototype networked game engine written in C++:
 
 * Cient/server networked architecture
 * Physics simulation with Box2D 
@@ -12,7 +12,7 @@ Little prototype networked game engine written in C++:
 
 Requirements
 ---------------
-* CMake
+* CMake - available at http://www.cmake.org/
 * Visual Studio 2013 (for Windows)
 
 Compilation on other platforms will require link libraries to be recompiled - currently only Windows libraries are included.
