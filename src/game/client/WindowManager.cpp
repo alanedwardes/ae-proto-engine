@@ -97,6 +97,7 @@ void WindowManager::Render()
 		oView.setSize(pSize.x, pSize.y);
 		m_oRenderWindow.setView(oView);
 
+		pMainView->SetSize(Point(pSize.x, pSize.y));
 		pMainView->Draw();
 	}
 

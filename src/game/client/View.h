@@ -48,6 +48,12 @@ public:
 			pView->Draw();
 	}
 
+	virtual void CalculateLayout()
+	{
+		for (auto pView : m_oChildren)
+			pView->CalculateLayout();
+	}
+
 	virtual void SetSize(Point poSize){ m_poSize = poSize; }
 	virtual Point GetSize() { return m_poSize; }
 
