@@ -10,11 +10,11 @@ class ISimulated;
 struct RenderedPolygon;
 class BaseGameObject;
 
-class WorldRenderer : public View, public IRenderCallback
+class WorldRenderer : public MainView
 {
 public:
 	WorldRenderer();
-	virtual void Render();
+	virtual void Draw();
 	virtual Camera GetCamera() { return m_oCamera; }
 private:
 	virtual void DrawRenderable(BaseGameObject *pEntity, IRendered* pRenderable);

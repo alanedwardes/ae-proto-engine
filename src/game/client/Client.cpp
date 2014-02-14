@@ -9,6 +9,7 @@
 #include "Locator.h"
 #include "SFMLDrawing.h"
 #include "WindowManager.h"
+#include "UIManager.h"
 
 void Client::Run()
 {
@@ -41,6 +42,10 @@ void Client::Run()
 	auto pWindowManager = new WindowManager();
 
 	auto pWorldRenderer = new WorldRenderer();
+	pWindowManager->AddMainView(pWorldRenderer);
+
+	auto pUIManager = new UIManager();
+	pWindowManager->AddMainView(pUIManager);
 
 	// Log the start time
 	long startTime = std::clock();

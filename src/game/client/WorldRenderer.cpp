@@ -13,7 +13,6 @@ WorldRenderer::WorldRenderer()
 {
 	auto szDebugFont = Locator::GameState()->Settings()->GetFile("debug_font");
 	m_iDebugFont = Locator::Drawing()->LoadFontResource(szDebugFont);
-	Locator::Drawing()->AddRenderCallbackObject(this);
 }
 
 void WorldRenderer::DrawDebugText(BaseGameObject *pEntity)
@@ -58,7 +57,7 @@ void WorldRenderer::DrawSimulated(BaseGameObject* pEntity, ISimulated* pSimulate
 	}
 }
 
-void WorldRenderer::Render()
+void WorldRenderer::Draw()
 {
 	auto oEntities = Locator::WorldManager()->GetGameObjects();
 	for (auto pEntity : oEntities)

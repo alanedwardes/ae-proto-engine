@@ -1,12 +1,9 @@
 #pragma once
 
-#include "View.h"
+#include "Label.h"
 
-class Button : public View
+class Button : public Label
 {
 public:
-	virtual void Draw()
-	{
 
-	}
 };

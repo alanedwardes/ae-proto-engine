@@ -73,28 +73,6 @@ public:
 		DrawShape(&oShape);
 	}
 
-	virtual void AddRenderCallbackObject(IRenderCallback *pRenderCallback)
-	{
-		m_oRenderers.push_back(pRenderCallback);
-	}
-
-	virtual void Render()
-	{
-		for (auto pRenderer : m_oRenderers)
-		{
-			auto oCamera = pRenderer->GetCamera();
-			auto oView = sf::View();
-			oView.setRotation(oCamera.rotation);
-			oView.zoom(oCamera.zoom);
-			oView.setCenter(POINT_TO_SFML(oCamera.position));
-			auto pSize = m_pRT->getSize();
-			oView.setSize(pSize.x, pSize.y);
-			m_pRT->setView(oView);
-
-			pRenderer->Render();
-		}
-	}
-
 	virtual int LoadFontResource(std::string szFilename)
 	{
 		auto pFont = new sf::Font();
@@ -139,7 +117,6 @@ private:
 	Color m_cLastColor;
 	int m_iLastTextureResource = -1;
 	bool m_bLastTextureFillState = false;
-	std::vector<IRenderCallback*> m_oRenderers;
 	std::vector<sf::Texture*> m_oTextureResources;
 	std::vector<sf::Font*> m_oFontResources;
 	sf::RenderTarget *m_pRT;

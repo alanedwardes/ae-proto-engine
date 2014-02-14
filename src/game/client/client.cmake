@@ -19,9 +19,11 @@ SET(${CLIENT_TARGET}_SOURCE_FILES
 	${WD}WorldRenderer.h
 	${WD}View.h
 	${WD}Button.h
+	${WD}Label.h
 	${WD}SFMLDrawing.h
 	${WD}WindowManager.h
 	${WD}WindowManager.cpp
+	${WD}UIManager.h
 )
 
 SOURCE_GROUP("" FILES 
@@ -33,6 +35,7 @@ SOURCE_GROUP("" FILES
 SOURCE_GROUP("UI" FILES
 	${WD}View.h
 	${WD}Button.h
+	${WD}Label.h
 )
 
 SOURCE_GROUP("Services" FILES 
@@ -47,6 +50,7 @@ SOURCE_GROUP("Systems" FILES
 	${WD}WorldRenderer.cpp
 	${WD}WindowManager.h
 	${WD}WindowManager.cpp
+	${WD}UIManager.h
 )
 
 SOURCE_GROUP("Game Objects" FILES 

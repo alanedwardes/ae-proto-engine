@@ -2,6 +2,14 @@
 
 #include <vector>
 #include <algorithm>
+#include "Point.h"
+
+struct Camera
+{
+	Point position;
+	float zoom = 0.0f;
+	float rotation = 0.0f;
+};
 
 class View
 {
@@ -39,7 +47,21 @@ public:
 		for (auto pView : m_oChildren)
 			pView->Draw();
 	}
-private:
-	View *m_pParent;
+
+	virtual void SetSize(Point poSize){ m_poSize = poSize; }
+	virtual Point GetSize() { return m_poSize; }
+
+	virtual void SetPosition(Point poPosition){ m_poPosition = poPosition; }
+	virtual Point GetPosition() { return m_poPosition; }
+protected:
+	Point m_poSize;
+	Point m_poPosition;
+	View *m_pParent = nullptr;
 	std::vector<View*> m_oChildren;
+};
+
+class MainView : public View
+{
+public:
+	virtual Camera GetCamera() = 0;
 };

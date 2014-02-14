@@ -17,6 +17,11 @@ WindowManager::WindowManager()
 	m_oRenderWindow.setFramerateLimit(Locator::GameState()->Settings()->GetInt("fps_limit", 60));
 }
 
+void WindowManager::AddMainView(MainView *pMainView)
+{
+	m_oMainViews.push_back(pMainView);
+}
+
 void WindowManager::ProcessEvents()
 {
 	auto pInputManager = (InputManager*)Locator::InputManager();
@@ -81,7 +86,19 @@ void WindowManager::Render()
 
 	m_oRenderWindow.clear(sf::Color::White);
 
-	Locator::Drawing()->Render();
+	for (auto pMainView : m_oMainViews)
+	{
+		auto oCamera = pMainView->GetCamera();
+		auto oView = sf::View();
+		oView.setRotation(oCamera.rotation);
+		oView.zoom(oCamera.zoom);
+		oView.setCenter(POINT_TO_SFML(oCamera.position));
+		auto pSize = m_oRenderWindow.getSize();
+		oView.setSize(pSize.x, pSize.y);
+		m_oRenderWindow.setView(oView);
+
+		pMainView->Draw();
+	}
 
     m_oRenderWindow.display();
 }
