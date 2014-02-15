@@ -3,6 +3,9 @@
 #include <vector>
 #include <algorithm>
 #include "Point.h"
+#include "Key.h"
+#include "Color.h"
+#include "Locator.h"
 
 struct Camera
 {
@@ -42,16 +45,109 @@ public:
 			m_oChildren.erase(oPosition);
 	}
 
-	virtual void Draw()
+	virtual void MouseOver(Point poPosition)
+	{
+		for (auto pView : m_oChildren) pView->MouseOver(poPosition);
+	}
+
+	virtual void MouseOut(Point poPosition)
+	{
+		for (auto pView : m_oChildren) pView->MouseOut(poPosition);
+	}
+
+	virtual void MouseMoved(Point poPosition)
 	{
 		for (auto pView : m_oChildren)
-			pView->Draw();
+		{
+			if (pView->IsPointInside(poPosition))
+				MouseOver(poPosition);
+			else
+				MouseOut(poPosition);
+			pView->MouseMoved(poPosition);
+		}
+	}
+
+	virtual void MouseDown(Point poPosition, Key button)
+	{
+		for (auto pView : m_oChildren)
+			if (pView->IsPointInside(poPosition))
+				pView->MouseDown(poPosition, button);
+	}
+
+	virtual void MouseUp(Point poPosition, Key button)
+	{
+		for (auto pView : m_oChildren)
+			if (pView->IsPointInside(poPosition))
+				pView->MouseUp(poPosition, button);
+	}
+
+	virtual void MouseWheel(Point poPosition, int iDelta)
+	{
+		for (auto pView : m_oChildren)
+			if (pView->IsPointInside(poPosition))
+				pView->MouseWheel(poPosition, iDelta);
+	}
+
+	virtual void KeyDown(Key oKey)
+	{
+		for (auto pView : m_oChildren) pView->KeyDown(oKey);
+	}
+
+	virtual void KeyUp(Key oKey)
+	{
+		for (auto pView : m_oChildren) pView->KeyUp(oKey);
+	}
+
+	virtual void Draw()
+	{
+		if (m_bDrawBackgroundColor)
+		{
+			Locator::Drawing()->SetColor(m_coBackgroundColor);
+			Locator::Drawing()->DrawRectangle(m_poSize, m_poPosition);
+		}
+
+		for (auto pView : m_oChildren) pView->Draw();
 	}
 
 	virtual void CalculateLayout()
 	{
-		for (auto pView : m_oChildren)
-			pView->CalculateLayout();
+		for (auto pView : m_oChildren) pView->CalculateLayout();
+	}
+
+	virtual void SetBackgroundColor(Color coColor)
+	{
+		m_coBackgroundColor = coColor;
+	}
+
+	virtual void SetDrawBackground(bool bDraw)
+	{
+		m_bDrawBackgroundColor = bDraw;
+	}
+
+	virtual bool GetDrawBackground()
+	{
+		return m_bDrawBackgroundColor;
+	}
+
+	virtual Color GetBackgroundColor()
+	{
+		return m_coBackgroundColor;
+	}
+
+	bool IsPointInside(Point poPoint)
+	{
+		auto poLower = GetPosition();
+		auto poUpper = GetPosition() + GetSize();
+
+		if (poPoint.x > poLower.x && poPoint.y > poLower.y)
+		{
+			if (poPoint.x < poUpper.x && poPoint.y < poUpper.y)
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	virtual void SetSize(Point poSize){ m_poSize = poSize; }
@@ -59,9 +155,11 @@ public:
 
 	virtual void SetPosition(Point poPosition){ m_poPosition = poPosition; }
 	virtual Point GetPosition() { return m_poPosition; }
-protected:
+private:
 	Point m_poSize;
 	Point m_poPosition;
+	Color m_coBackgroundColor;
+	bool m_bDrawBackgroundColor = false;
 	View *m_pParent = nullptr;
 	std::vector<View*> m_oChildren;
 };

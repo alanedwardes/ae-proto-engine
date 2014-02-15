@@ -7,11 +7,10 @@ class Label : public View
 public:
 	virtual void Draw()
 	{
-		Locator::Drawing()->SetColor(Color(128, 128, 128, 192));
-		Locator::Drawing()->DrawRectangle(m_poSize, m_poPosition);
+		View::Draw();
 
 		Locator::Drawing()->SetColor(Color(0, 0, 0, 255));
-		Locator::Drawing()->DrawText(m_szLabelText, 0, m_iLabelTextSize, m_poPosition);
+		Locator::Drawing()->DrawText(m_szLabelText, 0, m_iLabelTextSize, GetPosition());
 	}
 
 	virtual void SetText(std::string szLabelText){ m_szLabelText = szLabelText; }

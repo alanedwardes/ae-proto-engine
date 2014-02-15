@@ -30,7 +30,11 @@ void WindowManager::ProcessEvents()
 	sf::Event event;
     while (m_oRenderWindow.pollEvent(event))
     {
-		sf::Vector2i mousePos(event.mouseMove.x, event.mouseMove.y);
+		if (event.type == sf::Event::MouseMoved)
+		{
+			for (auto pMainView : m_oMainViews)
+				pMainView->MouseMoved(MouseEventToPoint(pMainView, event.mouseMove.x, event.mouseMove.y));
+		}
 		//auto pos = m_pWindowTarget->mapPixelToCoords(mousePos, m_oMainGameView);
 		//pInputManager->NewMousePosition(POINT_FROM_SFML(pos));
 
@@ -40,9 +44,38 @@ void WindowManager::ProcessEvents()
 		//if (event.type == sf::Event::Resized)
 		//	ResetView();
 
-		Key ePressedKey = KEY_NONE;
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			for (auto pMainView : m_oMainViews)
+				pMainView->MouseDown(MouseEventToPoint(pMainView, event.mouseButton.x, event.mouseButton.y),
+					pInputManager->TranslateKeyCode(event.mouseButton.button));
+
+			pInputManager->KeyPress(
+				pInputManager->TranslateKeyCode(event.mouseButton.button));
+		}
+
+		if (event.type == sf::Event::MouseButtonReleased)
+		{
+			for (auto pMainView : m_oMainViews)
+				pMainView->MouseUp(MouseEventToPoint(pMainView, event.mouseButton.x, event.mouseButton.y),
+					pInputManager->TranslateKeyCode(event.mouseButton.button));
+
+			pInputManager->KeyRelease(
+				pInputManager->TranslateKeyCode(event.mouseButton.button));
+		}
+
+		if (event.type == sf::Event::MouseWheelMoved)
+		{
+			for (auto pMainView : m_oMainViews)
+				pMainView->MouseWheel(MouseEventToPoint(pMainView, event.mouseMove.x, event.mouseMove.y),
+					event.mouseWheel.delta);
+		}
+
 		if (event.type == sf::Event::KeyPressed)
 		{
+			for (auto pMainView : m_oMainViews)
+				pMainView->KeyDown(pInputManager->TranslateKeyCode(event.key.code));
+
 			pInputManager->KeyPress(
 				pInputManager->TranslateKeyCode(event.key.code));
 
@@ -54,29 +87,34 @@ void WindowManager::ProcessEvents()
 			}
 		}
 
-		if (event.type == sf::Event::MouseButtonPressed)
-		{
-			pInputManager->KeyPress(
-				pInputManager->TranslateKeyCode(event.mouseButton.button));
-		}
-
-		if (event.type == sf::Event::MouseButtonReleased)
-		{
-			pInputManager->KeyRelease(
-				pInputManager->TranslateKeyCode(event.mouseButton.button));
-		}
-
-		if (event.type == sf::Event::MouseWheelMoved)
-		{
-			//m_flZoomLevel -= event.mouseWheel.delta / 10.0f;
-		}
-
 		if (event.type == sf::Event::KeyReleased)
 		{
+			for (auto pMainView : m_oMainViews)
+				pMainView->KeyUp(pInputManager->TranslateKeyCode(event.key.code));
+
 			pInputManager->KeyRelease(
 				pInputManager->TranslateKeyCode(event.key.code));
 		}
     }
+}
+
+Point WindowManager::MouseEventToPoint(MainView *pMainView, int x, int y)
+{
+	sf::Vector2i mousePos(x, y);
+	auto pCamera = CameraToSFMLView(pMainView->GetCamera());
+	auto poPosition = m_oRenderWindow.mapPixelToCoords(mousePos, pCamera);
+	return POINT_FROM_SFML(poPosition);
+}
+
+sf::View WindowManager::CameraToSFMLView(Camera oCamera)
+{
+	auto oView = sf::View();
+	oView.setRotation(oCamera.rotation);
+	oView.zoom(oCamera.zoom);
+	oView.setCenter(POINT_TO_SFML(oCamera.position));
+	auto pSize = m_oRenderWindow.getSize();
+	oView.setSize(pSize.x, pSize.y);
+	return oView;
 }
 
 void WindowManager::Render()
@@ -88,15 +126,9 @@ void WindowManager::Render()
 
 	for (auto pMainView : m_oMainViews)
 	{
-		auto oCamera = pMainView->GetCamera();
-		auto oView = sf::View();
-		oView.setRotation(oCamera.rotation);
-		oView.zoom(oCamera.zoom);
-		oView.setCenter(POINT_TO_SFML(oCamera.position));
-		auto pSize = m_oRenderWindow.getSize();
-		oView.setSize(pSize.x, pSize.y);
-		m_oRenderWindow.setView(oView);
+		m_oRenderWindow.setView(CameraToSFMLView(pMainView->GetCamera()));
 
+		auto pSize = m_oRenderWindow.getSize();
 		pMainView->SetSize(Point(pSize.x, pSize.y));
 		pMainView->Draw();
 	}

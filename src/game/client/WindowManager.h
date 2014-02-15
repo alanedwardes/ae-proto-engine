@@ -13,6 +13,8 @@ public:
 	virtual void ProcessEvents();
 	virtual void AddMainView(MainView *pMainView);
 private:
+	virtual Point MouseEventToPoint(MainView *pMainView, int x, int y);
+	virtual sf::View CameraToSFMLView(Camera oCamera);
 	std::vector<MainView*> m_oMainViews;
 	sf::RenderWindow m_oRenderWindow;
 	sf::Image m_oWindowIcon;

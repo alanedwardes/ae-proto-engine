@@ -29,8 +29,8 @@ void ClientUpdateManager::ReceiveUpdates()
 	while (m_pCommunicator->Receive())
 	{
 		auto oUpdate = m_pCommunicator->GetUpdate();
-		Debug::LogMessage("Processing update from % (% bytes)",
-		oUpdate.host.toString(), oUpdate.data.getDataSize());
+		//Debug::LogMessage("Processing update from % (% bytes)",
+		//oUpdate.host.toString(), oUpdate.data.getDataSize());
 		ProcessUpdate(oUpdate);
 	}
 }
