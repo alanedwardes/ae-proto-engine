@@ -18,6 +18,8 @@ public:
 			return KEY_DOWN;
 		case sf::Keyboard::Left:
 			return KEY_LEFT;
+		case sf::Keyboard::BackSpace:
+			return KEY_BACKSPACE;
 		default:
 			return KEY_NONE;
 		}

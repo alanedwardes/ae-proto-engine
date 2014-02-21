@@ -4,6 +4,7 @@
 #include "Polygon.h"
 #include "Vector.h"
 #include "Point.h"
+#include "Color.h"
 #include "jsoncpp\json.h"
 
 class Manifest
@@ -36,6 +37,9 @@ public:
 	virtual Point GetPoint(std::string szKey, Point poDefault = Point());
 	virtual void SetPoint(std::string szKey, Point poValue);
 
+	virtual Color GetColor(std::string szKey, Color coDefault = Color());
+	virtual void SetColor(std::string szKey, Color coValue);
+
 	virtual Manifest GetManifest(std::string szKey);
 	virtual void SetManifest(std::string szKey, Manifest oManifest);
 
@@ -46,6 +50,8 @@ public:
 
 	virtual std::vector<Manifest> GetManifestList(std::string szKey);
 	virtual void SetManifestList(std::string szKey, std::vector<Manifest> oManifestList);
+
+	virtual bool IsValid();
 private:
 	std::string m_szPath;
 	Json::Value m_oManifest;

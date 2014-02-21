@@ -7,12 +7,7 @@ struct Color
 {
 	Color() { }
 
-	Color(chan cR, chan cB, chan cG)
-	{
-		r = cR, b = cB, g = cG;
-	}
-
-	Color(chan cR, chan cB, chan cG, chan cA)
+	Color(chan cR, chan cB, chan cG, chan cA = 255)
 	{
 		r = cR, b = cB, g = cG, a = cA;
 	}

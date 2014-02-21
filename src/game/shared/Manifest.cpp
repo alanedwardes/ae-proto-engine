@@ -174,6 +174,23 @@ void Manifest::SetPoint(std::string szKey, Point poValue)
 	m_oManifest[szKey] = oValue;
 }
 
+Color Manifest::GetColor(std::string szKey, Color coDefault)
+{
+	auto oJsonValue = m_oManifest[szKey];
+	return Color(chan(oJsonValue[0u].asInt()), chan(oJsonValue[1u].asInt()),
+		chan(oJsonValue[2u].asInt()), chan(oJsonValue[3u].asInt()));
+}
+
+void Manifest::SetColor(std::string szKey, Color coValue)
+{
+	Json::Value oValue;
+	oValue.append(coValue.r);
+	oValue.append(coValue.g);
+	oValue.append(coValue.b);
+	oValue.append(coValue.a);
+	m_oManifest[szKey] = oValue;
+}
+
 Manifest Manifest::GetManifest(std::string szKey)
 {
 	return Manifest(m_oManifest[szKey]);
@@ -229,4 +246,9 @@ void Manifest::SetManifestList(std::string szKey, std::vector<Manifest> oManifes
 	}
 
 	m_oManifest[szKey] = oJsonValue;
+}
+
+bool Manifest::IsValid()
+{
+	return !m_oManifest.isNull();
 }

@@ -20,6 +20,7 @@ SET(${CLIENT_TARGET}_SOURCE_FILES
 	${WD}View.h
 	${WD}Button.h
 	${WD}Label.h
+	${WD}Input.h
 	${WD}SFMLDrawing.h
 	${WD}WindowManager.h
 	${WD}WindowManager.cpp
@@ -36,6 +37,7 @@ SOURCE_GROUP("UI" FILES
 	${WD}View.h
 	${WD}Button.h
 	${WD}Label.h
+	${WD}Input.h
 )
 
 SOURCE_GROUP("Services" FILES 

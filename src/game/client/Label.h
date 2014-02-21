@@ -9,9 +9,12 @@ public:
 	{
 		View::Draw();
 
-		Locator::Drawing()->SetColor(Color(0, 0, 0, 255));
+		Locator::Drawing()->SetColor(m_coTextColor);
 		Locator::Drawing()->DrawText(m_szLabelText, 0, m_iLabelTextSize, GetPosition());
 	}
+
+	virtual Color GetTextColor(){ return m_coTextColor; }
+	virtual void SetTextColor(Color coTextColor) { coTextColor = m_coTextColor; }
 
 	virtual void SetText(std::string szLabelText){ m_szLabelText = szLabelText; }
 	virtual std::string GetText() { return m_szLabelText; }
@@ -19,6 +22,7 @@ public:
 	virtual void SetTextSize(int iLabelTextSize) { m_iLabelTextSize = iLabelTextSize; }
 	virtual int GetTextSize() { return m_iLabelTextSize; }
 protected:
+	Color m_coTextColor;
 	int m_iLabelTextSize = 0;
 	std::string m_szLabelText;
 };

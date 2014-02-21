@@ -95,6 +95,10 @@ void WindowManager::ProcessEvents()
 			pInputManager->KeyRelease(
 				pInputManager->TranslateKeyCode(event.key.code));
 		}
+
+		if (event.type == sf::Event::TextEntered)
+			for (auto pMainView : m_oMainViews)
+				pMainView->TextEntered(event.text.unicode);
     }
 }
 
@@ -128,8 +132,11 @@ void WindowManager::Render()
 	{
 		m_oRenderWindow.setView(CameraToSFMLView(pMainView->GetCamera()));
 
-		auto pSize = m_oRenderWindow.getSize();
-		pMainView->SetSize(Point(pSize.x, pSize.y));
+		auto pSize = POINT_FROM_SFML(m_oRenderWindow.getSize());
+		if (pMainView->GetSize() != pSize)
+		{
+			pMainView->SetSize(pSize);
+		}
 		pMainView->Draw();
 	}
 

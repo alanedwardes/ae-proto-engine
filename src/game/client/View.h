@@ -88,6 +88,22 @@ public:
 				pView->MouseWheel(poPosition, iDelta);
 	}
 
+	virtual void SetTheme(Manifest *pThemeManifest)
+	{
+		auto oViewManifest = pThemeManifest->GetManifest("view");
+		if (oViewManifest.IsValid())
+		{
+			
+		}
+
+		for (auto pView : m_oChildren) pView->SetTheme(pThemeManifest);
+	}
+
+	virtual void TextEntered(unsigned int iUnicodeChar)
+	{
+		for (auto pView : m_oChildren) pView->TextEntered(iUnicodeChar);
+	}
+
 	virtual void KeyDown(Key oKey)
 	{
 		for (auto pView : m_oChildren) pView->KeyDown(oKey);
@@ -150,10 +166,19 @@ public:
 		return false;
 	}
 
-	virtual void SetSize(Point poSize){ m_poSize = poSize; }
+	virtual void SetSize(Point poSize)
+	{
+		m_poSize = poSize;
+		CalculateLayout();
+	}
+
 	virtual Point GetSize() { return m_poSize; }
 
-	virtual void SetPosition(Point poPosition){ m_poPosition = poPosition; }
+	virtual void SetPosition(Point poPosition)
+	{
+		m_poPosition = poPosition;
+		CalculateLayout();
+	}
 	virtual Point GetPosition() { return m_poPosition; }
 private:
 	Point m_poSize;
