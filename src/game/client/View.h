@@ -31,6 +31,11 @@ public:
 		pParent->AddChild(this);
 	}
 
+	virtual View* GetParent()
+	{
+		return m_pParent;
+	}
+
 	virtual void AddChild(View *pChild)
 	{
 		auto oPosition = std::find(m_oChildren.begin(), m_oChildren.end(), pChild);
@@ -60,9 +65,9 @@ public:
 		for (auto pView : m_oChildren)
 		{
 			if (pView->IsPointInside(poPosition))
-				MouseOver(poPosition);
+				pView->MouseOver(poPosition);
 			else
-				MouseOut(poPosition);
+				pView->MouseOut(poPosition);
 			pView->MouseMoved(poPosition);
 		}
 	}
@@ -119,7 +124,7 @@ public:
 		if (m_bDrawBackgroundColor)
 		{
 			Locator::Drawing()->SetColor(m_coBackgroundColor);
-			Locator::Drawing()->DrawRectangle(m_poSize, m_poPosition);
+			ViewDrawRectangle(m_poSize, m_poPosition);
 		}
 
 		for (auto pView : m_oChildren) pView->Draw();
@@ -180,6 +185,31 @@ public:
 		CalculateLayout();
 	}
 	virtual Point GetPosition() { return m_poPosition; }
+
+	virtual Point GetOffsetPosition(Point position)
+	{
+		Point offsetPosition = GetPosition() + position;
+		View *view = this;
+		while ((view = view->GetParent()) != nullptr)
+		{
+			offsetPosition = (offsetPosition + view->GetPosition());
+		}
+
+		return offsetPosition;
+	}
+
+	virtual void ViewDrawPolygon(Polygon polygon, Point position, float rotation = 0)
+	{
+		Locator::Drawing()->DrawPolygon(polygon, GetOffsetPosition(position), rotation);
+	}
+	virtual void ViewDrawRectangle(Point size, Point position, float rotation = 0)
+	{
+		Locator::Drawing()->DrawRectangle(size, GetOffsetPosition(position), rotation);
+	}
+	virtual void ViewDrawText(std::string szText, int iFontResource, int iSize, Point position, float rotation = 0)
+	{
+		Locator::Drawing()->DrawText(szText, iFontResource, iSize, GetOffsetPosition(position), rotation);
+	}
 private:
 	Point m_poSize;
 	Point m_poPosition;

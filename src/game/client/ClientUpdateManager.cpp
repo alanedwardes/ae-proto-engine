@@ -1,5 +1,5 @@
 #include "ClientUpdateManager.h"
-#include "UdpCommunicator.h"
+#include "TcpCommunicator.h"
 #include "INetworked.h"
 #include "BaseGameObject.h"
 #include "InputManager.h"
@@ -12,7 +12,7 @@ ClientUpdateManager::ClientUpdateManager()
 	assert(m_pCommunicator == 0);
 
 	// Create a new communicator
-	m_pCommunicator.reset(new UdpCommunicator());
+	m_pCommunicator.reset(new TcpCommunicator());
 
 	// Set to an invalid port
 	m_oLocalPort = -1;
@@ -22,6 +22,9 @@ void ClientUpdateManager::SetConnection(std::string szAddress, int iPort)
 {
 	m_oRemoteHost.ipV4Address = CommunicatorIpV4Address_t(szAddress);
 	m_oRemoteHost.port = iPort;
+
+	auto pTcpCommunicator = (TcpCommunicator*)m_pCommunicator.get();
+	pTcpCommunicator->Connect(m_oRemoteHost);
 }
 
 void ClientUpdateManager::ReceiveUpdates()

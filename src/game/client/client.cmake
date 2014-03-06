@@ -25,6 +25,7 @@ SET(${CLIENT_TARGET}_SOURCE_FILES
 	${WD}WindowManager.h
 	${WD}WindowManager.cpp
 	${WD}UIManager.h
+	${WD}Menu.h
 )
 
 SOURCE_GROUP("" FILES 
@@ -34,6 +35,16 @@ SOURCE_GROUP("" FILES
 )
 
 SOURCE_GROUP("UI" FILES
+	${WD}WorldRenderer.h
+	${WD}WorldRenderer.cpp
+	${WD}UIManager.h
+)
+
+SOURCE_GROUP("UI\\Views" FILES
+	${WD}Menu.h
+)
+
+SOURCE_GROUP("UI\\Controls" FILES
 	${WD}View.h
 	${WD}Button.h
 	${WD}Label.h
@@ -48,11 +59,8 @@ SOURCE_GROUP("Systems" FILES
 	${WD}ClientUpdateManager.h
 	${WD}ClientUpdateManager.cpp
 	${WD}InputManager.h
-	${WD}WorldRenderer.h
-	${WD}WorldRenderer.cpp
 	${WD}WindowManager.h
 	${WD}WindowManager.cpp
-	${WD}UIManager.h
 )
 
 SOURCE_GROUP("Game Objects" FILES 

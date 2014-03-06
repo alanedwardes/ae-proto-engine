@@ -10,7 +10,7 @@ public:
 		View::Draw();
 
 		Locator::Drawing()->SetColor(m_coTextColor);
-		Locator::Drawing()->DrawText(m_szLabelText, 0, m_iLabelTextSize, GetPosition());
+		ViewDrawText(m_szLabelText, 0, m_iLabelTextSize, GetPosition());
 	}
 
 	virtual Color GetTextColor(){ return m_coTextColor; }

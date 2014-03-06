@@ -1,5 +1,5 @@
 #include "ServerUpdateManager.h"
-#include "UdpCommunicator.h"
+#include "TcpCommunicator.h"
 #include "INetworked.h"
 #include "StreamSerialiser.h"
 
@@ -17,8 +17,8 @@ ServerUpdateManager::ServerUpdateManager(int iListenPort)
 	m_lStartTime = std::clock();
 	m_iLastUpdateClientId = 0;
 
-	m_pSendingCommunicator.reset(new UdpCommunicator());
-	m_pReceivingCommunicator.reset(new UdpCommunicator());
+	//m_pSendingCommunicator.reset(new TcpCommunicator());
+	m_pReceivingCommunicator.reset(new TcpCommunicator());
 	m_pReceivingCommunicator->Bind(iListenPort);
 }
 
@@ -99,7 +99,8 @@ void ServerUpdateManager::SendInitialClientUpdate(UpdateClient_t *updateClient)
 	update.data << SERVER_UPDATE_INITIAL;
 	update.data << updateClient->updateClientId;
 	update.data << Locator::WorldManager()->LevelFilename();
-	m_pSendingCommunicator->SendPacket(update);
+	//m_pSendingCommunicator->SendPacket(update);
+	m_pReceivingCommunicator->SendPacket(update);
 
 	// Set the last sent update type
 	updateClient->lastServerUpdate = SERVER_UPDATE_INITIAL;
@@ -138,7 +139,8 @@ void ServerUpdateManager::SendClientUpdate(UpdateClient_t *updateClient)
 		}
 	}
 	updateClient->lastServerUpdate = SERVER_UPDATE_FULL;
-	m_pSendingCommunicator->SendPacket(update);
+	//m_pSendingCommunicator->SendPacket(update);
+	m_pReceivingCommunicator->SendPacket(update);
 }
 
 void ServerUpdateManager::ProcessUpdate(CommunicatorUpdate_t update)
