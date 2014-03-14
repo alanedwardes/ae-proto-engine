@@ -15,7 +15,7 @@ bool UdpCommunicator::Bind(CommunicatorPort_t port)
 	sf::Socket::Status status = m_oUdpSocket.bind(port);
 
 	if (status == sf::Socket::Done)
-		Debug::DebugMessage("Socket listening on port %", port);
+		Debug::DebugMessage("UDP Socket listening on port %", port);
 	else
 		Debug::WarningMessage("Error (%) binding to port %", status, port);
 

@@ -1,5 +1,6 @@
 #include "ServerUpdateManager.h"
 #include "TcpCommunicator.h"
+#include "UdpCommunicator.h"
 #include "INetworked.h"
 #include "StreamSerialiser.h"
 
@@ -17,8 +18,21 @@ ServerUpdateManager::ServerUpdateManager(int iListenPort)
 	m_lStartTime = std::clock();
 	m_iLastUpdateClientId = 0;
 
-	//m_pSendingCommunicator.reset(new TcpCommunicator());
-	m_pReceivingCommunicator.reset(new TcpCommunicator());
+	auto pSettingsManifest = Locator::GameState()->Settings();
+	auto szProtocolName = pSettingsManifest->GetString("listen_protocol");
+
+	if (szProtocolName == TCP_PROTOCOL_NAME)
+	{
+		auto pTcpCommunicator = new TcpCommunicator();
+		m_pSendingCommunicator.reset(pTcpCommunicator);
+		m_pReceivingCommunicator.reset(pTcpCommunicator);
+	}
+	else //if (szProtocolName == UDP_PROTOCOL_NAME) - assume UDP
+	{
+		m_pSendingCommunicator.reset(new UdpCommunicator());
+		m_pReceivingCommunicator.reset(new UdpCommunicator());
+	}
+
 	m_pReceivingCommunicator->Bind(iListenPort);
 }
 
@@ -99,7 +113,7 @@ void ServerUpdateManager::SendInitialClientUpdate(UpdateClient_t *updateClient)
 	update.data << SERVER_UPDATE_INITIAL;
 	update.data << updateClient->updateClientId;
 	update.data << Locator::WorldManager()->LevelFilename();
-	//m_pSendingCommunicator->SendPacket(update);
+	m_pSendingCommunicator->SendPacket(update);
 	m_pReceivingCommunicator->SendPacket(update);
 
 	// Set the last sent update type
@@ -139,7 +153,7 @@ void ServerUpdateManager::SendClientUpdate(UpdateClient_t *updateClient)
 		}
 	}
 	updateClient->lastServerUpdate = SERVER_UPDATE_FULL;
-	//m_pSendingCommunicator->SendPacket(update);
+	m_pSendingCommunicator->SendPacket(update);
 	m_pReceivingCommunicator->SendPacket(update);
 }
 

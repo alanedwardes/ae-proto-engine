@@ -8,6 +8,8 @@
 // Forward declaration
 namespace sf { class TcpSocket; class TcpListener; }
 
+#define TCP_PROTOCOL_NAME "tcp"
+
 class TcpCommunicator : public Communicator
 {
 public:

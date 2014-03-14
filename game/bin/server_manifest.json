@@ -3,6 +3,7 @@
 	"model_directory": "../models",
 	
 	"listen_port": 1236, // Listen settings
+	"listen_protocol": "udp",
 	"level_name": "simple_level.json", // Level to start on
 	"client_timeout": 10 // Client timeout is 10 seconds
 }

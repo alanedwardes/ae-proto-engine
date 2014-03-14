@@ -8,6 +8,8 @@
 // Forward declaration
 namespace sf { class UdpSocket; }
 
+#define UDP_PROTOCOL_NAME "udp"
+
 class UdpCommunicator : public Communicator
 {
 public:
