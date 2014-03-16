@@ -9,5 +9,6 @@
    "debug_font" : "inconsolata.otf",
    "fps_limit" : 60,
    "level_directory" : "../levels",
-   "model_directory" : "../models"
+   "model_directory" : "../models",
+   "update_rate": 30
 }

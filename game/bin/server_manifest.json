@@ -5,5 +5,7 @@
 	"listen_port": 1236, // Listen settings
 	"listen_protocol": "udp",
 	"level_name": "simple_level.json", // Level to start on
-	"client_timeout": 10 // Client timeout is 10 seconds
+	"client_timeout": 10, // Client timeout is 10 seconds
+	"update_rate": 60, // Number of times to send out updates a second
+	"simulation_rate": 30 // Number of times to run physics simulations per second
 }

@@ -52,7 +52,7 @@ void Client::Run()
 
 	// Send updates 30 times per second
 	long lastUpdateTime = 0;
-	float updateFrequency = 1000 / 30;
+	float updateFrequency = 1000 / pGameState->Settings()->GetFloat("update_rate", 30.0f);
 
 	// Loop while the client is running
 	while (pGameState->Running())

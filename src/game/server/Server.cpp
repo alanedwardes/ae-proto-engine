@@ -34,11 +34,11 @@ void Server::Run()
 
 	// Simulate 60 times per second
 	long lastSimulateTime = 0;
-	float simulationFrequency = 1000.0f / 60.0f;
+	float simulationFrequency = 1000.0f / pGameState->Settings()->GetFloat("update_rate", 60.0f);
 
 	// Send updates 30 times per second
 	long lastUpdateTime = 0;
-	float updateFrequency = 1000.0f / 30.0f;
+	float updateFrequency = 1000.0f / pGameState->Settings()->GetFloat("simulation_rate", 30.0f);
 
 	//// Start the server
 	// Create a network update manager and listen
