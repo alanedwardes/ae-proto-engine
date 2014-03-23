@@ -20,9 +20,9 @@ public:
 
 private:
 	Manifest m_oSettings;
-	bool m_bRunning;
-	long m_lTime;
+	bool m_bRunning = true;
+	long m_lTime = 0.0f;
 #ifdef CLIENT
-	int m_iUpdateClientId;
+	int m_iUpdateClientId = 0;
 #endif
 };

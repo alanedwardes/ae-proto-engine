@@ -22,11 +22,10 @@ public:
 	virtual void PreSimulate()
 	{
 		const float amount = 50;
-		const float max = 100.0f;
+		const float max = 300.0f;
 		float x = 0, y = 0;
-		if ((pressedKeys & KEY_UP) && (Locator::GameState()->Time() > lastJumpTime + 1000.0f))
+		if (pressedKeys & KEY_UP)
 		{
-			lastJumpTime = Locator::GameState()->Time();
 			y = -(amount * 4);
 		}
 		if (pressedKeys & KEY_RIGHT)
@@ -36,12 +35,12 @@ public:
 		if (pressedKeys & KEY_LEFT)
 			x = -amount;
 
-		if (x != 0 || y != 0)
+		if (x || y)
 		{
 			for (auto pSimulatedBody : GetSimulationData())
 			{
 				pSimulatedBody->linearVelocity.x = std::max(-max, std::min(pSimulatedBody->linearVelocity.x + x, max));
-				pSimulatedBody->linearVelocity.y = pSimulatedBody->linearVelocity.y + y;
+				pSimulatedBody->linearVelocity.y = std::max(-max, std::min(pSimulatedBody->linearVelocity.y + y, max));
 			}
 		}
 	};
@@ -59,6 +58,4 @@ public:
 		oSerialiser << playerId << position;
 		return oSerialiser.Serialise();
 	};
-
-	long lastJumpTime;
 };

@@ -1,7 +1,7 @@
 {
 	"simulate": [{
 		"size": [25, 60],
-		"mass": 10000,
+		"mass": 5000,
 		"fixed_rotation": true,
 		"friction": 0.66
 	}],

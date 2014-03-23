@@ -44,8 +44,10 @@ void Client::Run()
 	auto pWorldRenderer = new WorldRenderer();
 	pWindowManager->AddMainView(pWorldRenderer);
 
-	auto pUIManager = new UIManager();
-	pWindowManager->AddMainView(pUIManager);
+	// To be implemented - this allows a user interface
+	// main view. See UIManager.h for implementation.
+	//auto pUIManager = new UIManager();
+	//pWindowManager->AddMainView(pUIManager);
 
 	// Log the start time
 	long startTime = std::clock();
